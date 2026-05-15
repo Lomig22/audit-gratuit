@@ -647,6 +647,45 @@ footer{
 .sticky-cta svg{margin-left:2px}
 @media(max-width:720px){.sticky-cta{display:inline-flex}}
 
+/* ---------- MODAL (popup form) ---------- */
+.modal{
+  position:fixed;inset:0;z-index:200;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal.open{display:flex}
+.modal-overlay{
+  position:absolute;inset:0;
+  background:rgba(10,10,10,.65);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  animation:fadeIn .3s ease-out;
+}
+.modal-card{
+  position:relative;z-index:1;
+  width:100%;max-width:540px;max-height:92vh;
+  overflow-y:auto;
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:34px 30px 28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  animation:slideUp .4s var(--t);
+}
+.modal-card .form-head{margin-bottom:14px}
+.modal-close{
+  position:absolute;top:14px;right:14px;z-index:2;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--gray-100);color:var(--gray-700);
+  display:grid;place-items:center;
+  transition:background .2s var(--t),transform .3s var(--t),color .2s var(--t);
+  cursor:pointer;border:none;
+}
+.modal-close:hover{background:var(--ink);color:var(--white);transform:rotate(90deg)}
+.modal-close svg{width:16px;height:16px;stroke-width:2.4}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(20px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+body.modal-open{overflow:hidden}
+
 /* ---------- REVEAL ANIM ---------- */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--t),transform .8s var(--t)}
 .reveal.in{opacity:1;transform:none}
@@ -771,17 +810,17 @@ footer{
             <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action, que vous bossiez avec moi ensuite ou non.</span>
           </div>
 
-          <form onsubmit="handleSubmit(event)">
+          <form onsubmit="handleSubmit(event)" data-source="hero">
             <div class="field">
-              <input type="text" id="name" placeholder=" " required autocomplete="name" />
+              <input type="text" name="name" id="name" placeholder=" " required autocomplete="name" />
               <label for="name">Nom & prénom</label>
             </div>
             <div class="field">
-              <input type="email" id="email" placeholder=" " required autocomplete="email" />
+              <input type="email" name="email" id="email" placeholder=" " required autocomplete="email" />
               <label for="email">Email</label>
             </div>
             <div class="field">
-              <input type="tel" id="phone" placeholder=" " required autocomplete="tel" />
+              <input type="tel" name="phone" id="phone" placeholder=" " required autocomplete="tel" />
               <label for="phone">Téléphone</label>
             </div>
 
@@ -1178,6 +1217,61 @@ footer{
   </div>
 </footer>
 
+<!-- MODAL (popup form, opens on every CTA) -->
+<div class="modal" id="formModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+  <div class="modal-overlay" data-close-modal></div>
+  <div class="modal-card">
+    <button class="modal-close" data-close-modal aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="form-head">
+      <span class="badge"><span class="dot"></span>Plus que 3 places — semaine du 18/05</span>
+      <h3 id="modalTitle">Réservez votre audit stratégique gratuit</h3>
+      <p>30 min en visio — repartez avec un plan d'action concret.</p>
+    </div>
+
+    <div class="form-guarantee">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action.</span>
+    </div>
+
+    <form onsubmit="handleSubmit(event)" data-source="modal">
+      <div class="field">
+        <input type="text" name="name" id="modal-name" placeholder=" " required autocomplete="name" />
+        <label for="modal-name">Nom & prénom</label>
+      </div>
+      <div class="field">
+        <input type="email" name="email" id="modal-email" placeholder=" " required autocomplete="email" />
+        <label for="modal-email">Email</label>
+      </div>
+      <div class="field">
+        <input type="tel" name="phone" id="modal-phone" placeholder=" " required autocomplete="tel" />
+        <label for="modal-phone">Téléphone</label>
+      </div>
+
+      <button type="submit" class="cta">
+        Je réserve mon audit gratuit
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+
+    <div class="form-foot">
+      <div class="item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><strong>100% gratuit</strong></div>
+      <div class="item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Sans engagement</div>
+      <div class="item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Réponse 24h</div>
+    </div>
+
+    <div class="form-author">
+      <div class="ph"><img src="lomig.png" alt="Lomig Guegueniat" /></div>
+      <div class="text">
+        <span class="sig">Lomig</span> vous rappelle <strong>personnellement</strong> sous 24h.<br>
+        Pas de standard, pas de robot — c'est moi au bout du fil.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- STICKY CTA (mobile only) -->
 <a href="#reserver" class="sticky-cta" id="stickyCta">
   <span class="dot-g"></span>
@@ -1186,7 +1280,46 @@ footer{
 </a>
 
 <script>
-/* Sticky CTA: show on mobile when the hero form is OUT of view */
+/* ---------- MODAL ---------- */
+const modal=document.getElementById('formModal');
+function openModal(){
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  modal.setAttribute('aria-hidden','false');
+  setTimeout(()=>{
+    const f=document.getElementById('modal-name');
+    if(f) f.focus({preventScroll:true});
+  },280);
+}
+function closeModal(){
+  modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  modal.setAttribute('aria-hidden','true');
+}
+modal.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',closeModal));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && modal.classList.contains('open')) closeModal();
+});
+
+/* ---------- ANCHOR INTERCEPTION ---------- */
+/* Every #reserver link now opens the modal instead of scrolling.
+   Other in-page links keep smooth-scroll behavior. */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',ev=>{
+    const id=a.getAttribute('href');
+    if(id==='#reserver'){
+      ev.preventDefault();
+      openModal();
+      return;
+    }
+    if(id.length>1){
+      const t=document.querySelector(id);
+      if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+    }
+  });
+});
+
+/* ---------- STICKY CTA visibility ---------- */
 const stickyCta=document.getElementById('stickyCta');
 const heroForm=document.querySelector('.hero .form-card');
 if(stickyCta && heroForm){
@@ -1198,7 +1331,61 @@ if(stickyCta && heroForm){
   sIo.observe(heroForm);
 }
 
-/* Reveal on scroll */
+/* ---------- FORM SUBMISSION (Formsubmit.co AJAX) ---------- */
+/* Both forms (hero + modal) post to lomig.guegueniat@gmail.com.
+   First submission triggers a one-time confirmation email — click
+   the link inside it and all subsequent submissions flow through. */
+const FORMSUBMIT_ENDPOINT='https://formsubmit.co/ajax/lomig.guegueniat@gmail.com';
+
+async function handleSubmit(e){
+  e.preventDefault();
+  const form=e.target;
+  const btn=form.querySelector('button[type="submit"]');
+  const original=btn.innerHTML;
+  btn.innerHTML='Envoi en cours…';
+  btn.disabled=true;
+
+  const data=new FormData(form);
+  const payload={
+    name:data.get('name'),
+    email:data.get('email'),
+    telephone:data.get('phone'),
+    source:form.dataset.source||'inconnu',
+    _subject:`Nouveau audit gratuit — ${data.get('name')||'sans nom'}`,
+    _template:'table',
+    _captcha:'false',
+    _autoresponse:`Bonjour ${data.get('name')||''},\n\nMerci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 min.\n\nÀ très vite,\nLomig`
+  };
+
+  try{
+    const res=await fetch(FORMSUBMIT_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('Submission failed');
+
+    btn.innerHTML='✓ Demande envoyée — vous serez recontacté sous 24h';
+    btn.style.background='#16a34a';
+    setTimeout(()=>{
+      form.reset();
+      btn.innerHTML=original;
+      btn.disabled=false;
+      btn.style.background='';
+      if(form.dataset.source==='modal') closeModal();
+    },3500);
+  }catch(err){
+    btn.innerHTML='Erreur — réessayez dans un instant';
+    btn.style.background='#dc2626';
+    setTimeout(()=>{
+      btn.innerHTML=original;
+      btn.disabled=false;
+      btn.style.background='';
+    },3000);
+  }
+}
+
+/* ---------- REVEAL ON SCROLL ---------- */
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
@@ -1206,37 +1393,7 @@ const io=new IntersectionObserver((entries)=>{
 },{threshold:.12,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* Form submit (placeholder) */
-function handleSubmit(e){
-  e.preventDefault();
-  const btn=e.target.querySelector('button[type="submit"]');
-  const original=btn.innerHTML;
-  btn.innerHTML='Envoi en cours...';
-  btn.disabled=true;
-  setTimeout(()=>{
-    btn.innerHTML='✓ Demande envoyée — vous serez recontacté';
-    btn.style.background='#16a34a';
-    setTimeout(()=>{
-      btn.innerHTML=original;
-      btn.disabled=false;
-      btn.style.background='';
-      e.target.reset();
-    },3500);
-  },900);
-}
-
-/* Smooth scroll for in-page links */
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',ev=>{
-    const id=a.getAttribute('href');
-    if(id.length>1){
-      const t=document.querySelector(id);
-      if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
-    }
-  });
-});
-
-/* Stat counter */
+/* ---------- STAT COUNTER ---------- */
 const counter=document.querySelector('[data-count="250"]');
 if(counter){
   const obs=new IntersectionObserver((entries,o)=>{
@@ -1254,16 +1411,6 @@ if(counter){
   },{threshold:.4});
   obs.observe(counter);
 }
-
-/* Auto focus first form field when user clicks any CTA targeting #reserver */
-document.querySelectorAll('a[href="#reserver"]').forEach(a=>{
-  a.addEventListener('click',()=>{
-    setTimeout(()=>{
-      const f=document.getElementById('name');
-      if(f) f.focus({preventScroll:true});
-    },600);
-  });
-});
 </script>
 
 </body>
