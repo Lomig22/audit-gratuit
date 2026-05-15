@@ -1319,22 +1319,23 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && modal.classList.contains('open')) closeModal();
 });
 
-/* ---------- ANCHOR INTERCEPTION ---------- */
-/* Every #reserver link now opens the modal instead of scrolling.
-   Other in-page links keep smooth-scroll behavior. */
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',ev=>{
-    const id=a.getAttribute('href');
-    if(id==='#reserver'){
-      ev.preventDefault();
-      openModal();
-      return;
-    }
-    if(id.length>1){
-      const t=document.querySelector(id);
-      if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
-    }
-  });
+/* ---------- ANCHOR INTERCEPTION (delegated) ---------- */
+/* One listener on document catches every click that bubbles up from
+   any <a href="#..."> — including links added/revealed later. The
+   .closest() call also catches clicks on the inner <svg> of a CTA. */
+document.addEventListener('click',ev=>{
+  const a=ev.target.closest('a[href^="#"]');
+  if(!a) return;
+  const id=a.getAttribute('href');
+  if(id==='#reserver'){
+    ev.preventDefault();
+    openModal();
+    return;
+  }
+  if(id.length>1){
+    const t=document.querySelector(id);
+    if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  }
 });
 
 /* ---------- STICKY CTA visibility ---------- */
