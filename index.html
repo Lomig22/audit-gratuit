@@ -82,54 +82,59 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
   padding:24px 0;text-align:center;
 }
 
-/* ---------- HERO (vertical centered) ---------- */
+/* ---------- HERO (2 columns, compact) ---------- */
 .hero{
-  padding:30px 0 90px;position:relative;overflow:hidden;
+  padding:18px 0 36px;position:relative;overflow:hidden;
 }
 .hero::before{
   content:"";position:absolute;inset:0;
   background:
-    radial-gradient(900px 600px at 50% -10%,rgba(10,10,10,.06),transparent 60%),
+    radial-gradient(900px 600px at 50% -10%,rgba(10,10,10,.05),transparent 60%),
     radial-gradient(700px 500px at 90% 30%,rgba(10,10,10,.03),transparent 60%);
   pointer-events:none;
 }
-.hero-inner{position:relative;z-index:1;text-align:center}
+.hero-grid{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;
+}
+.hero-left{position:sticky;top:24px}
+.hero-right{display:flex;flex-direction:column;gap:14px}
 
-.hero .eyebrow{margin-bottom:30px}
+.hero-right .eyebrow{align-self:flex-start;margin:0}
 
-.hero h1{max-width:920px;margin:0 auto}
+.hero h1{margin:0;font-size:clamp(30px,3.4vw,46px);line-height:1.05;text-align:left}
 .hero h1 .high{
   background:linear-gradient(180deg,#0a0a0a 0%,#3a3a3a 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.hero h1 .underline{position:relative;display:inline-block;white-space:nowrap}
+.hero h1 .underline{position:relative;display:inline-block}
 .hero h1 .underline::after{
   content:"";position:absolute;left:0;right:0;bottom:.05em;height:.18em;
   background:var(--ink);opacity:.12;border-radius:6px;z-index:-1;
 }
 
 .hero-sub{
-  margin:24px auto 0;font-size:clamp(17px,1.45vw,21px);
-  color:var(--gray-600);max-width:680px;line-height:1.55;
+  margin:0;font-size:clamp(14.5px,1.05vw,16.5px);
+  color:var(--gray-600);line-height:1.5;
 }
 .hero-sub strong{color:var(--ink);font-weight:600}
 
-/* mini trust bar under hero subtitle */
+/* mini trust bar (left aligned now) */
 .trust-mini{
-  margin:28px auto 0;display:inline-flex;align-items:center;gap:18px;
-  padding:10px 18px;background:var(--white);
+  display:inline-flex;align-items:center;gap:14px;align-self:flex-start;
+  padding:8px 14px;background:var(--white);
   border:1px solid var(--gray-200);border-radius:100px;
-  box-shadow:var(--shadow-sm);
+  box-shadow:var(--shadow-sm);margin:2px 0 2px;
 }
 .trust-mini .stars{display:flex;gap:1px}
-.trust-mini .stars svg{width:14px;height:14px;fill:#facc15}
-.trust-mini .sep{width:1px;height:14px;background:var(--gray-200)}
-.trust-mini .text{font-size:13px;color:var(--gray-600);font-weight:500}
+.trust-mini .stars svg{width:12px;height:12px;fill:#facc15}
+.trust-mini .sep{width:1px;height:12px;background:var(--gray-200)}
+.trust-mini .text{font-size:12px;color:var(--gray-600);font-weight:500}
 .trust-mini .text strong{color:var(--ink);font-weight:700}
 
-/* video centered */
+/* video in left column */
 .video-wrap{
-  margin:54px auto 0;max-width:960px;
+  margin:0;width:100%;
   position:relative;border-radius:var(--radius-lg);overflow:hidden;
   aspect-ratio:16/9;background:#0a0a0a;
   box-shadow:var(--shadow-xl);
@@ -151,7 +156,7 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
 }
 .play-btn{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:96px;height:96px;border-radius:50%;background:var(--white);
+  width:78px;height:78px;border-radius:50%;background:var(--white);
   display:grid;place-items:center;
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   z-index:2;transition:transform .3s var(--t);
@@ -162,7 +167,7 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
   animation:ring 2.6s infinite;
 }
 @keyframes ring{0%{transform:scale(1);opacity:1}100%{transform:scale(1.45);opacity:0}}
-.play-btn svg{width:34px;height:34px;margin-left:5px;fill:var(--ink)}
+.play-btn svg{width:28px;height:28px;margin-left:4px;fill:var(--ink)}
 .video-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.06)}
 .video-label{
   position:absolute;top:18px;left:18px;z-index:2;
@@ -173,94 +178,72 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
 }
 .video-label .live{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 1.6s infinite}
 
-/* CTA scroll hint between video and form */
-.scroll-cue{
-  margin:34px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px;
-  color:var(--gray-500);font-size:13.5px;font-weight:500;letter-spacing:.04em;
-}
-.scroll-cue .arrow{
-  width:34px;height:34px;border-radius:50%;border:1px solid var(--gray-200);
-  display:grid;place-items:center;background:var(--white);
-  animation:bounce 2s infinite;
-}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
-/* ---------- FORM SECTION (anchor / conversion) ---------- */
-.form-section{
-  padding:60px 0 100px;position:relative;
-}
-.form-section .container{display:flex;justify-content:center}
+/* ---------- FORM CARD (embedded in hero right column, compact) ---------- */
 .form-card{
-  width:100%;max-width:620px;
+  width:100%;
   background:var(--white);
   border:1px solid var(--gray-200);
-  border-radius:var(--radius-lg);
-  padding:44px 40px;
-  box-shadow:var(--shadow-lg);
-  position:relative;
+  border-radius:18px;
+  padding:22px 22px 20px;
+  box-shadow:var(--shadow);
+  margin-top:6px;
 }
-.form-card::before{
-  content:"";position:absolute;inset:-2px;
-  border-radius:calc(var(--radius-lg) + 2px);
-  background:linear-gradient(180deg,rgba(10,10,10,.06),transparent 40%);
-  z-index:-1;
-}
-.form-head{margin-bottom:26px;text-align:center}
+.form-head{margin-bottom:14px}
 .form-head .badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--gray-100);padding:7px 14px;border-radius:100px;
-  font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:18px;
-  letter-spacing:.05em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--gray-100);padding:5px 11px;border-radius:100px;
+  font-size:10.5px;font-weight:700;color:var(--gray-700);margin-bottom:10px;
+  letter-spacing:.06em;text-transform:uppercase;
 }
-.form-head .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite}
-.form-head h3{font-size:clamp(24px,2.2vw,30px);letter-spacing:-.025em;line-height:1.15}
-.form-head p{margin-top:10px;font-size:15px;color:var(--gray-500)}
+.form-head .badge .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2.4s infinite}
+.form-head h3{font-size:17px;letter-spacing:-.02em;line-height:1.2}
+.form-head p{margin-top:4px;font-size:12.5px;color:var(--gray-500)}
 
-form{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+form{display:flex;flex-direction:column;gap:9px;margin-top:4px}
 .field{position:relative}
 .field label{
-  position:absolute;left:18px;top:18px;
-  font-size:15px;color:var(--gray-500);
+  position:absolute;left:14px;top:13px;
+  font-size:13.5px;color:var(--gray-500);
   pointer-events:none;transition:all .2s var(--t);
   background:var(--white);padding:0 4px;font-weight:400;
 }
 .field input{
-  width:100%;padding:20px 18px 16px;
-  border:1.5px solid var(--gray-200);border-radius:14px;
-  font-size:15.5px;background:var(--white);outline:none;
+  width:100%;padding:15px 14px 11px;
+  border:1.5px solid var(--gray-200);border-radius:11px;
+  font-size:14px;background:var(--white);outline:none;
   transition:border-color .2s var(--t),box-shadow .2s var(--t);
 }
 .field input:focus,
 .field input:not(:placeholder-shown){border-color:var(--ink)}
 .field input:focus+label,
 .field input:not(:placeholder-shown)+label{
-  top:-8px;font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.05em;
+  top:-7px;font-size:10.5px;font-weight:600;color:var(--ink);letter-spacing:.05em;
 }
-.field input:focus{box-shadow:0 0 0 4px rgba(10,10,10,.06)}
+.field input:focus{box-shadow:0 0 0 3px rgba(10,10,10,.06)}
 
 .cta{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;padding:20px 24px;margin-top:10px;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:14px 20px;margin-top:4px;
   background:var(--ink);color:var(--white);
-  border-radius:14px;font-weight:600;font-size:16.5px;letter-spacing:-.01em;
+  border-radius:11px;font-weight:600;font-size:14.5px;letter-spacing:-.01em;
   transition:transform .25s var(--t),box-shadow .25s var(--t),background .25s var(--t);
-  box-shadow:0 12px 30px rgba(10,10,10,.22);
+  box-shadow:0 10px 24px rgba(10,10,10,.2);
 }
-.cta:hover{transform:translateY(-2px);background:#000;box-shadow:0 18px 44px rgba(10,10,10,.3)}
+.cta:hover{transform:translateY(-2px);background:#000;box-shadow:0 14px 32px rgba(10,10,10,.28)}
 .cta svg{transition:transform .25s var(--t)}
 .cta:hover svg{transform:translateX(4px)}
 
 .form-foot{
-  margin-top:22px;padding-top:22px;border-top:1px solid var(--gray-200);
-  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
-  font-size:12.5px;color:var(--gray-500);
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  font-size:11px;color:var(--gray-500);
 }
-.form-foot .item{display:inline-flex;align-items:center;gap:7px}
-.form-foot .item svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2.2}
+.form-foot .item{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.form-foot .item svg{width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2.4}
 .form-foot strong{color:var(--ink);font-weight:600}
 
-/* ---------- DISCOVER (intro under form) ---------- */
-.discover{padding:90px 0 30px;text-align:center}
+/* ---------- DISCOVER (intro under hero) ---------- */
+.discover{padding:60px 0 20px;text-align:center}
 .discover h2 .accent{
   background:linear-gradient(180deg,#1a1a1a,#5a5a5a);
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -495,31 +478,31 @@ footer{
 
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .hero-left{position:static}
+  .form-card{max-width:560px;margin-left:auto;margin-right:auto}
   .reviews-grid{grid-template-columns:repeat(2,1fr)}
   .stats-grid{grid-template-columns:1fr;gap:14px}
   .about-badges{grid-template-columns:1fr;max-width:480px}
 }
 @media(max-width:720px){
-  .top-strip{padding:18px 0}
-  .hero{padding:10px 0 60px}
-  h1{font-size:38px}
+  .top-strip{padding:16px 0}
+  .hero{padding:8px 0 40px}
   h2{font-size:30px}
   .container,.container-sm{padding:0 18px}
-  .form-card{padding:32px 24px}
-  .form-section{padding:40px 0 70px}
-  .video-wrap{margin-top:38px}
-  .play-btn{width:68px;height:68px}
-  .play-btn svg{width:26px;height:26px}
+  .form-card{padding:20px}
+  .play-btn{width:60px;height:60px}
+  .play-btn svg{width:22px;height:22px}
   .cards{grid-template-columns:1fr!important}
   .cards .card{grid-column:span 1!important}
   .reviews-grid{grid-template-columns:1fr}
-  .discover{padding:60px 0 10px}
-  .learn{padding:60px 0 70px}
-  .about{padding:80px 0}
-  .reviews{padding:80px 0}
-  .final{padding:80px 0}
+  .discover{padding:50px 0 10px}
+  .learn{padding:50px 0 70px}
+  .about{padding:70px 0}
+  .reviews{padding:70px 0}
+  .final{padding:70px 0}
   .stat-card{padding:30px 26px}
-  .trust-mini{flex-wrap:wrap;gap:10px;padding:10px 16px}
+  .trust-mini{flex-wrap:wrap;gap:8px;padding:8px 14px}
 }
 </style>
 </head>
@@ -535,96 +518,87 @@ footer{
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero">
+<!-- HERO (video left + H1/H2/form right) -->
+<section class="hero" id="reserver">
   <div class="container">
-    <div class="hero-inner">
+    <div class="hero-grid">
 
-      <span class="eyebrow reveal"><span class="dot"></span>Spécialiste acquisition — Artisans du bâtiment</span>
-
-      <h1 class="reveal delay-1">
-        <span class="high">Plus de devis qualifiés</span> pour votre <span class="underline">entreprise du bâtiment</span>.
-      </h1>
-
-      <p class="hero-sub reveal delay-2">
-        Découvrez le système qui génère <strong>20 à 100 demandes de devis qualifiées par mois</strong> — sans prospecter, sans publier tous les jours.
-      </p>
-
-      <div class="trust-mini reveal delay-3">
-        <div class="stars">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-        </div>
-        <span class="text"><strong>5,0 / 5</strong> sur Google</span>
-        <span class="sep"></span>
-        <span class="text"><strong>+250 entreprises</strong> du bâtiment accompagnées</span>
-      </div>
-
-      <div class="video-wrap reveal delay-3" onclick="this.classList.add('playing')">
-        <div class="video-label"><span class="live"></span>Vidéo — 8 min</div>
-        <button class="play-btn" aria-label="Lire la vidéo">
-          <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
-        </button>
-      </div>
-
-      <div class="scroll-cue reveal delay-4">
-        Réservez votre audit gratuit ci-dessous
-        <div class="arrow">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      <!-- LEFT : video -->
+      <div class="hero-left reveal">
+        <div class="video-wrap" onclick="this.classList.add('playing')">
+          <div class="video-label"><span class="live"></span>Vidéo — 8 min</div>
+          <button class="play-btn" aria-label="Lire la vidéo">
+            <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
+          </button>
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
+      <!-- RIGHT : H1 + sub + form -->
+      <div class="hero-right">
+        <span class="eyebrow reveal"><span class="dot"></span>Spécialiste acquisition — Artisans du bâtiment</span>
 
-<!-- FORM (anchor) -->
-<section class="form-section" id="reserver">
-  <div class="container">
-    <div class="form-card reveal">
+        <h1 class="reveal delay-1">
+          <span class="high">Plus de devis qualifiés</span> pour votre <span class="underline">entreprise du bâtiment</span>.
+        </h1>
 
-      <div class="form-head">
-        <span class="badge"><span class="dot"></span>Places limitées cette semaine</span>
-        <h3>Réservez votre audit stratégique gratuit</h3>
-        <p>30 minutes en visio — repartez avec un plan d'action concret.</p>
-      </div>
+        <p class="hero-sub reveal delay-2">
+          Découvrez le système qui génère <strong>20 à 100 demandes de devis qualifiées par mois</strong> — sans prospecter, sans publier tous les jours.
+        </p>
 
-      <form onsubmit="handleSubmit(event)">
-        <div class="field">
-          <input type="text" id="name" placeholder=" " required autocomplete="name" />
-          <label for="name">Nom & prénom</label>
-        </div>
-        <div class="field">
-          <input type="email" id="email" placeholder=" " required autocomplete="email" />
-          <label for="email">Email</label>
-        </div>
-        <div class="field">
-          <input type="tel" id="phone" placeholder=" " required autocomplete="tel" />
-          <label for="phone">Téléphone</label>
+        <div class="trust-mini reveal delay-2">
+          <div class="stars">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          </div>
+          <span class="text"><strong>5,0 / 5</strong> · +250 entreprises accompagnées</span>
         </div>
 
-        <button type="submit" class="cta">
-          Je réserve mon audit gratuit
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </form>
+        <div class="form-card reveal delay-3">
+          <div class="form-head">
+            <span class="badge"><span class="dot"></span>Places limitées cette semaine</span>
+            <h3>Réservez votre audit stratégique gratuit</h3>
+            <p>30 min en visio — repartez avec un plan d'action concret.</p>
+          </div>
 
-      <div class="form-foot">
-        <div class="item">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          <strong>100% gratuit</strong>
+          <form onsubmit="handleSubmit(event)">
+            <div class="field">
+              <input type="text" id="name" placeholder=" " required autocomplete="name" />
+              <label for="name">Nom & prénom</label>
+            </div>
+            <div class="field">
+              <input type="email" id="email" placeholder=" " required autocomplete="email" />
+              <label for="email">Email</label>
+            </div>
+            <div class="field">
+              <input type="tel" id="phone" placeholder=" " required autocomplete="tel" />
+              <label for="phone">Téléphone</label>
+            </div>
+
+            <button type="submit" class="cta">
+              Je réserve mon audit gratuit
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+
+          <div class="form-foot">
+            <div class="item">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong>100% gratuit</strong>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Sans engagement
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Réponse 24h
+            </div>
+          </div>
         </div>
-        <div class="item">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Sans engagement
-        </div>
-        <div class="item">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Réponse sous 24h
-        </div>
+
       </div>
 
     </div>
