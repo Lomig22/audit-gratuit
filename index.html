@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lomig Guegueniat — Plus de devis pour artisans du bâtiment</title>
+<meta name="description" content="Système d'acquisition digitale pour artisans du bâtiment. Générez entre 20 et 100 demandes de devis qualifiées par mois. Audit gratuit." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+/* ---------- RESET & BASE ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#fafafa;
+  color:#0a0a0a;
+  line-height:1.55;
+  overflow-x:hidden;
+  font-weight:400;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+
+:root{
+  --black:#0a0a0a;
+  --ink:#111;
+  --gray-900:#1a1a1a;
+  --gray-700:#3a3a3a;
+  --gray-500:#737373;
+  --gray-300:#d4d4d4;
+  --gray-200:#e8e8e8;
+  --gray-100:#f1f1f1;
+  --gray-50:#fafafa;
+  --white:#ffffff;
+  --accent:#0a0a0a;
+  --radius:18px;
+  --radius-lg:26px;
+  --shadow-sm:0 1px 2px rgba(10,10,10,.04),0 2px 8px rgba(10,10,10,.04);
+  --shadow:0 4px 14px rgba(10,10,10,.06),0 12px 40px rgba(10,10,10,.06);
+  --shadow-lg:0 20px 60px rgba(10,10,10,.12);
+  --t:cubic-bezier(.2,.7,.2,1);
+}
+
+/* ---------- LAYOUT HELPERS ---------- */
+.container{max-width:1240px;margin:0 auto;padding:0 24px;width:100%}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gray-700);
+  padding:8px 14px;border:1px solid var(--gray-200);border-radius:100px;
+  background:var(--white);
+}
+.eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;background:#16a34a;
+  box-shadow:0 0 0 4px rgba(22,163,74,.15);
+  animation:pulse 2.4s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(22,163,74,.15)}50%{box-shadow:0 0 0 8px rgba(22,163,74,.05)}}
+
+h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--ink)}
+h1{font-size:clamp(34px,5.2vw,64px);font-weight:800;letter-spacing:-.035em}
+h2{font-size:clamp(28px,3.8vw,48px);font-weight:800;letter-spacing:-.03em}
+h3{font-size:clamp(20px,2vw,24px);font-weight:700}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-.01em}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  background:rgba(250,250,250,.78);
+  border-bottom:1px solid transparent;
+  transition:all .3s var(--t);
+}
+.nav.scrolled{border-bottom-color:var(--gray-200);background:rgba(255,255,255,.85)}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;max-width:1240px;margin:0 auto;
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:17px}
+.logo-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--ink);color:var(--white);
+  display:grid;place-items:center;font-weight:800;font-size:14px;
+}
+.nav-cta{
+  padding:11px 20px;background:var(--ink);color:var(--white);
+  border-radius:100px;font-weight:600;font-size:14px;
+  transition:transform .25s var(--t),background .25s var(--t);
+}
+.nav-cta:hover{transform:translateY(-1px);background:#000}
+
+/* ---------- HERO ---------- */
+.hero{padding:130px 0 60px;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(700px 400px at 8% 0%,rgba(10,10,10,.05),transparent 60%),
+    radial-gradient(800px 500px at 95% 20%,rgba(10,10,10,.04),transparent 60%);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:start;
+  position:relative;z-index:1;
+}
+.hero-left{padding-top:8px}
+.hero-eyebrow{margin-bottom:28px}
+.hero h1 .high{
+  background:linear-gradient(180deg,#0a0a0a 0%,#3a3a3a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero h1 .underline{
+  position:relative;display:inline-block;
+}
+.hero h1 .underline::after{
+  content:"";position:absolute;left:0;right:0;bottom:.05em;height:.18em;
+  background:var(--ink);opacity:.12;border-radius:6px;z-index:-1;
+}
+.hero-sub{
+  margin-top:24px;font-size:clamp(16px,1.4vw,19px);color:var(--gray-700);
+  max-width:600px;line-height:1.55;
+}
+.hero-sub strong{color:var(--ink);font-weight:600}
+.hero-bullets{
+  margin-top:28px;display:flex;flex-direction:column;gap:12px;
+}
+.hero-bullets li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:15.5px;color:var(--gray-700);list-style:none;
+}
+.hero-bullets svg{flex:0 0 22px;margin-top:2px}
+
+.video-wrap{
+  margin-top:38px;position:relative;border-radius:var(--radius-lg);overflow:hidden;
+  aspect-ratio:16/9;background:#0a0a0a;
+  box-shadow:var(--shadow-lg);
+  cursor:pointer;
+  transition:transform .4s var(--t);
+}
+.video-wrap:hover{transform:translateY(-2px)}
+.video-wrap::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(135deg,#1a1a1a,#0a0a0a 60%),
+    radial-gradient(circle at 30% 30%,rgba(255,255,255,.06),transparent 50%);
+}
+.video-wrap::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,255,255,.08),transparent 40%),
+    repeating-linear-gradient(45deg,transparent 0 30px,rgba(255,255,255,.015) 30px 31px);
+}
+.play-btn{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:84px;height:84px;border-radius:50%;background:var(--white);
+  display:grid;place-items:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+  z-index:2;transition:transform .3s var(--t);
+}
+.play-btn::before{
+  content:"";position:absolute;inset:-12px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);
+  animation:ring 2.6s infinite;
+}
+@keyframes ring{0%{transform:scale(1);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.play-btn svg{width:30px;height:30px;margin-left:4px;fill:var(--ink)}
+.video-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.06)}
+.video-label{
+  position:absolute;bottom:18px;left:18px;z-index:2;
+  display:flex;align-items:center;gap:8px;
+  color:var(--white);font-size:13px;font-weight:500;
+  background:rgba(255,255,255,.1);backdrop-filter:blur(10px);
+  padding:8px 14px;border-radius:100px;border:1px solid rgba(255,255,255,.15);
+}
+.video-label .live{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 1.6s infinite}
+
+/* FORM CARD */
+.form-card{
+  background:var(--white);border:1px solid var(--gray-200);
+  border-radius:var(--radius-lg);padding:36px 32px;
+  box-shadow:var(--shadow);
+  position:sticky;top:100px;
+}
+.form-head{margin-bottom:24px}
+.form-head .badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#f4f4f4;padding:6px 12px;border-radius:100px;
+  font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:14px;
+}
+.form-head .badge .dot{width:6px;height:6px;border-radius:50%;background:#16a34a}
+.form-head h3{font-size:24px;letter-spacing:-.02em;line-height:1.15}
+.form-head p{margin-top:8px;font-size:14.5px;color:var(--gray-500)}
+
+form{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.field{position:relative}
+.field label{
+  position:absolute;left:18px;top:16px;
+  font-size:14px;color:var(--gray-500);
+  pointer-events:none;transition:all .2s var(--t);
+  background:var(--white);padding:0 4px;
+}
+.field input{
+  width:100%;padding:18px 18px 14px;
+  border:1.5px solid var(--gray-200);border-radius:14px;
+  font-size:15px;background:var(--white);outline:none;
+  transition:border-color .2s var(--t),box-shadow .2s var(--t);
+}
+.field input:focus,
+.field input:not(:placeholder-shown){
+  border-color:var(--ink);
+}
+.field input:focus+label,
+.field input:not(:placeholder-shown)+label{
+  top:-7px;font-size:11px;font-weight:600;color:var(--ink);letter-spacing:.04em;
+}
+.field input:focus{box-shadow:0 0 0 4px rgba(10,10,10,.06)}
+
+.cta{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:18px 24px;margin-top:8px;
+  background:var(--ink);color:var(--white);
+  border-radius:14px;font-weight:600;font-size:16px;letter-spacing:-.01em;
+  transition:transform .25s var(--t),box-shadow .25s var(--t),background .25s var(--t);
+  box-shadow:0 10px 30px rgba(10,10,10,.18);
+}
+.cta:hover{transform:translateY(-2px);background:#000;box-shadow:0 14px 40px rgba(10,10,10,.28)}
+.cta svg{transition:transform .25s var(--t)}
+.cta:hover svg{transform:translateX(4px)}
+.cta-mini{
+  margin-top:14px;text-align:center;font-size:12.5px;color:var(--gray-500);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+
+.trust-row{
+  display:flex;align-items:center;gap:18px;margin-top:22px;
+  padding-top:20px;border-top:1px solid var(--gray-200);
+}
+.trust-row .stars{display:flex;gap:2px}
+.trust-row .stars svg{width:14px;height:14px;fill:#facc15}
+.trust-row .text{font-size:12.5px;color:var(--gray-500);line-height:1.4}
+.trust-row .text strong{color:var(--ink);font-weight:600}
+
+/* ---------- DECOUVERTE / Sub hero ---------- */
+.discover{padding:90px 0 30px}
+.discover-inner{
+  max-width:880px;margin:0 auto;text-align:center;
+}
+.discover h2 .accent{
+  background:linear-gradient(180deg,#1a1a1a,#5a5a5a);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.discover p{
+  margin-top:22px;font-size:clamp(16px,1.3vw,18px);color:var(--gray-700);line-height:1.65;
+}
+
+/* ---------- LEARN CARDS ---------- */
+.learn{padding:70px 0 100px}
+.section-head{text-align:center;max-width:780px;margin:0 auto 50px}
+.section-head .eyebrow{margin-bottom:18px}
+.section-head p{margin-top:18px;color:var(--gray-500);font-size:16.5px;line-height:1.6}
+.cards{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+.cards .card:nth-child(4),
+.cards .card:nth-child(5){grid-column:span 1}
+.card{
+  background:var(--white);border:1px solid var(--gray-200);
+  border-radius:var(--radius);padding:32px 28px;
+  position:relative;overflow:hidden;
+  transition:transform .35s var(--t),box-shadow .35s var(--t),border-color .35s var(--t);
+}
+.card::after{
+  content:"";position:absolute;inset:auto -40% -60% auto;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(10,10,10,.03),transparent 70%);
+  transition:transform .6s var(--t);
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--gray-300)}
+.card:hover::after{transform:translate(-30px,-30px)}
+.card .num{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:42px;color:var(--gray-300);line-height:1;
+  margin-bottom:18px;font-weight:400;
+}
+.card h3{font-size:19px;letter-spacing:-.02em;line-height:1.25;margin-bottom:10px}
+.card p{color:var(--gray-500);font-size:14.5px;line-height:1.6}
+
+@media(min-width:900px){
+  .cards{grid-template-columns:repeat(6,1fr)}
+  .cards .card:nth-child(1),
+  .cards .card:nth-child(2),
+  .cards .card:nth-child(3){grid-column:span 2}
+  .cards .card:nth-child(4),
+  .cards .card:nth-child(5){grid-column:span 3}
+}
+
+/* ---------- STATS ---------- */
+.stats{padding:80px 0;background:var(--ink);color:var(--white);position:relative;overflow:hidden}
+.stats::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(600px 300px at 15% 30%,rgba(255,255,255,.04),transparent 60%),
+    radial-gradient(700px 400px at 85% 70%,rgba(255,255,255,.03),transparent 60%);
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative;
+}
+.stat-card{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius);padding:36px 32px;
+  background:rgba(255,255,255,.02);
+  transition:background .3s var(--t),border-color .3s var(--t);
+}
+.stat-card:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.15)}
+.stat-num{
+  font-size:clamp(44px,5.5vw,64px);font-weight:800;letter-spacing:-.04em;
+  line-height:1;
+  background:linear-gradient(180deg,#fff,#aaa);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.stat-label{margin-top:14px;font-size:15px;color:rgba(255,255,255,.65);max-width:240px;line-height:1.5}
+.stat-card .icon{
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  display:grid;place-items:center;margin-bottom:24px;
+}
+.stat-card .icon svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8}
+
+/* ---------- ABOUT ---------- */
+.about{padding:120px 0}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.about-photo{
+  position:relative;aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;
+  background:linear-gradient(135deg,#1a1a1a,#3a3a3a);
+  box-shadow:var(--shadow-lg);
+}
+.about-photo::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(255,255,255,.08),transparent 50%),
+    repeating-linear-gradient(135deg,transparent 0 22px,rgba(255,255,255,.02) 22px 23px);
+}
+.about-photo .silhouette{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:60%;height:78%;
+  background:radial-gradient(ellipse at 50% 25%,#5a5a5a 0,#2a2a2a 60%,transparent 75%);
+  border-radius:50% 50% 0 0 / 30% 30% 0 0;
+  filter:blur(2px);
+}
+.about-photo .ph-tag{
+  position:absolute;top:20px;left:20px;z-index:2;
+  background:rgba(255,255,255,.1);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.15);
+  padding:8px 14px;border-radius:100px;
+  color:#fff;font-size:12px;font-weight:600;letter-spacing:.05em;
+}
+.about-photo .ph-card{
+  position:absolute;bottom:24px;left:24px;right:24px;z-index:2;
+  background:rgba(255,255,255,.1);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.18);
+  padding:18px 20px;border-radius:16px;
+  color:#fff;
+}
+.about-photo .ph-card .name{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.about-photo .ph-card .role{font-size:13px;opacity:.7;margin-top:2px}
+
+.about-content .eyebrow{margin-bottom:22px}
+.about-content h2{margin-bottom:24px}
+.about-content p{color:var(--gray-700);font-size:16px;line-height:1.7;margin-bottom:16px}
+.about-content p strong{color:var(--ink);font-weight:600}
+
+.badges{display:grid;grid-template-columns:1fr;gap:12px;margin:30px 0}
+.badge-row{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 20px;background:var(--white);
+  border:1px solid var(--gray-200);border-radius:14px;
+  transition:transform .25s var(--t),border-color .25s var(--t);
+}
+.badge-row:hover{transform:translateX(4px);border-color:var(--ink)}
+.badge-row .b-icon{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--ink);color:var(--white);
+  display:grid;place-items:center;flex:0 0 42px;
+}
+.badge-row .b-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
+.badge-row .b-title{font-weight:600;font-size:15px;letter-spacing:-.01em}
+.badge-row .b-desc{font-size:13.5px;color:var(--gray-500);margin-top:2px}
+
+.about .cta{display:inline-flex;width:auto;padding:16px 28px;font-size:15px;margin-top:10px}
+
+/* ---------- REVIEWS ---------- */
+.reviews{padding:120px 0;background:linear-gradient(180deg,var(--gray-50),var(--white))}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.review{
+  background:var(--white);border:1px solid var(--gray-200);
+  border-radius:var(--radius);padding:28px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .35s var(--t),box-shadow .35s var(--t);
+}
+.review:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.review .stars{display:flex;gap:2px}
+.review .stars svg{width:16px;height:16px;fill:#facc15}
+.review p{font-size:14.5px;color:var(--gray-700);line-height:1.6;flex:1}
+.review .author{
+  display:flex;align-items:center;gap:12px;
+  padding-top:16px;border-top:1px solid var(--gray-200);
+}
+.review .av{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,#e5e5e5,#bdbdbd);
+  display:grid;place-items:center;font-weight:700;color:#555;
+  flex:0 0 42px;font-size:14px;
+}
+.review .who{font-weight:600;font-size:14px;letter-spacing:-.01em}
+.review .job{font-size:12.5px;color:var(--gray-500);margin-top:2px}
+
+/* ---------- FINAL CTA ---------- */
+.final{padding:120px 0;position:relative;overflow:hidden;background:var(--ink);color:var(--white)}
+.final::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(800px 500px at 50% 0%,rgba(255,255,255,.05),transparent 60%),
+    radial-gradient(600px 400px at 80% 100%,rgba(255,255,255,.03),transparent 60%);
+}
+.final-inner{position:relative;text-align:center;max-width:820px;margin:0 auto}
+.final .eyebrow{
+  background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);
+  color:rgba(255,255,255,.7);
+}
+.final h2{
+  margin-top:24px;color:var(--white);
+  font-size:clamp(34px,5vw,60px);font-weight:800;letter-spacing:-.035em;
+}
+.final h2 .serif{
+  background:linear-gradient(180deg,#fff,#888);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.final-text{
+  margin-top:26px;font-size:clamp(16px,1.3vw,18.5px);
+  color:rgba(255,255,255,.7);line-height:1.7;
+}
+.final-text strong{color:#fff;font-weight:500}
+.final .cta{
+  display:inline-flex;width:auto;padding:20px 36px;font-size:17px;
+  background:var(--white);color:var(--ink);
+  box-shadow:0 20px 60px rgba(255,255,255,.18);
+  margin-top:36px;
+}
+.final .cta:hover{background:#f1f1f1;box-shadow:0 26px 70px rgba(255,255,255,.25)}
+.final .cta-mini{color:rgba(255,255,255,.55);margin-top:18px}
+
+/* ---------- FOOTER ---------- */
+footer{padding:50px 0 60px;background:var(--ink);color:rgba(255,255,255,.55);border-top:1px solid rgba(255,255,255,.08)}
+.foot-inner{
+  display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;
+}
+.foot-inner .logo{color:#fff}
+.foot-inner .logo-mark{background:#fff;color:var(--ink)}
+.foot-inner p{font-size:13px}
+
+/* ---------- ANIMATIONS ON SCROLL ---------- */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--t),transform .8s var(--t)}
+.reveal.in{opacity:1;transform:none}
+.reveal.delay-1{transition-delay:.08s}
+.reveal.delay-2{transition-delay:.16s}
+.reveal.delay-3{transition-delay:.24s}
+.reveal.delay-4{transition-delay:.32s}
+.reveal.delay-5{transition-delay:.4s}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:1024px){
+  .hero-grid,.about-grid{grid-template-columns:1fr;gap:40px}
+  .form-card{position:static}
+  .reviews-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:1fr;gap:14px}
+}
+@media(max-width:720px){
+  .hero{padding:110px 0 40px}
+  .nav-inner{padding:14px 20px}
+  .nav-cta{padding:10px 16px;font-size:13px}
+  .logo span{font-size:15px}
+  h1{font-size:36px}
+  h2{font-size:30px}
+  .container{padding:0 18px}
+  .form-card{padding:28px 22px}
+  .cards{grid-template-columns:1fr!important}
+  .cards .card{grid-column:span 1!important}
+  .reviews-grid{grid-template-columns:1fr}
+  .discover{padding:60px 0 10px}
+  .learn{padding:50px 0 70px}
+  .about{padding:80px 0}
+  .reviews{padding:80px 0}
+  .final{padding:90px 0}
+  .video-wrap{margin-top:30px}
+  .play-btn{width:64px;height:64px}
+  .play-btn svg{width:24px;height:24px}
+  .stat-card{padding:30px 26px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">L</div>
+      <span>Lomig Guegueniat</span>
+    </a>
+    <a href="#reserver" class="nav-cta">Audit gratuit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+
+      <!-- LEFT: copy + video -->
+      <div class="hero-left">
+        <div class="hero-eyebrow reveal">
+          <span class="eyebrow"><span class="dot"></span>Spécialiste acquisition — Artisans du bâtiment</span>
+        </div>
+
+        <h1 class="reveal delay-1">
+          Accédez gratuitement à <span class="high">85% des stratégies</span> que j'utilise pour <span class="underline">remplir l'agenda</span> des artisans du bâtiment en demandes de devis.
+        </h1>
+
+        <p class="hero-sub reveal delay-2">
+          <strong>Sans prospecter à froid. Sans publier tous les jours. Sans perdre votre temps</strong> sur des méthodes qui ne ramènent aucun chantier.
+        </p>
+
+        <ul class="hero-bullets reveal delay-3">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#0a0a0a"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Système éprouvé sur +250 entreprises du bâtiment
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#0a0a0a"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Spécifique à votre métier — pas une recette générique
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#0a0a0a"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Vous repartez avec un plan d'action concret en 30 min
+          </li>
+        </ul>
+
+        <div class="video-wrap reveal delay-4" onclick="this.classList.add('playing')">
+          <div class="video-label"><span class="live"></span>Vidéo — 8 min</div>
+          <button class="play-btn" aria-label="Lire la vidéo">
+            <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: form -->
+      <aside class="form-card reveal delay-2" id="reserver">
+        <div class="form-head">
+          <span class="badge"><span class="dot"></span>Places limitées cette semaine</span>
+          <h3>Réservez votre audit stratégique gratuit</h3>
+          <p>30 minutes — en visio — sans engagement.</p>
+        </div>
+
+        <form onsubmit="handleSubmit(event)">
+          <div class="field">
+            <input type="text" id="name" placeholder=" " required autocomplete="name" />
+            <label for="name">Nom & prénom</label>
+          </div>
+          <div class="field">
+            <input type="email" id="email" placeholder=" " required autocomplete="email" />
+            <label for="email">Email</label>
+          </div>
+          <div class="field">
+            <input type="tel" id="phone" placeholder=" " required autocomplete="tel" />
+            <label for="phone">Téléphone</label>
+          </div>
+
+          <button type="submit" class="cta">
+            Je réserve mon audit gratuit
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="cta-mini">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Audit offert aux entreprises sérieuses — places limitées
+          </div>
+        </form>
+
+        <div class="trust-row">
+          <div class="stars">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          </div>
+          <div class="text"><strong>5,0 / 5</strong> sur Google · +250 artisans accompagnés</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- DISCOVER -->
+<section class="discover">
+  <div class="container">
+    <div class="discover-inner">
+      <span class="eyebrow reveal"><span class="dot"></span>Ce que vous allez découvrir</span>
+      <h2 class="reveal delay-1" style="margin-top:22px">
+        Comment générer <span class="accent">20 à 100 demandes de devis qualifiées</span> par mois grâce à un système digital simple et durable.
+      </h2>
+      <p class="reveal delay-2">
+        Pas de pub Instagram qui coûte un bras. Pas de tunnel à 12 étapes. Un système clair, calibré pour le bâtiment, qui transforme votre site et votre visibilité locale en machine à devis — pendant que vous êtes sur chantier.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- LEARN CARDS -->
+<section class="learn">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal"><span class="dot"></span>Ce que vous allez apprendre pendant l'audit</span>
+      <h2 class="reveal delay-1" style="margin-top:18px">5 leviers concrets pour <span class="serif">remplir votre agenda</span></h2>
+      <p class="reveal delay-2">Aucun jargon. Que des actions claires que vous pouvez appliquer dès la semaine suivante.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card reveal delay-1">
+        <div class="num">01</div>
+        <h3>Pourquoi 90% des sites d'artisans ne génèrent aucun devis</h3>
+        <p>Les 3 erreurs structurelles qui transforment votre site en simple carte de visite — et pas en outil commercial.</p>
+      </div>
+      <div class="card reveal delay-2">
+        <div class="num">02</div>
+        <h3>Ce qui convertit vraiment en 2026</h3>
+        <p>Les éléments précis qui poussent un prospect à demander un devis chez vous plutôt que chez le concurrent d'à côté.</p>
+      </div>
+      <div class="card reveal delay-3">
+        <div class="num">03</div>
+        <h3>Le système utilisé par mes meilleurs clients</h3>
+        <p>L'architecture complète qui permet à mes artisans de recevoir 20 à 100 demandes de devis qualifiées chaque mois.</p>
+      </div>
+      <div class="card reveal delay-4">
+        <div class="num">04</div>
+        <h3>Comment doubler vos demandes sans tout refaire</h3>
+        <p>Les ajustements ciblés qui multiplient vos résultats en quelques semaines — sans rebâtir votre site de zéro.</p>
+      </div>
+      <div class="card reveal delay-5">
+        <div class="num">05</div>
+        <h3>Les erreurs invisibles qui bloquent votre croissance</h3>
+        <p>Ces détails techniques et stratégiques que personne ne vous montre, et qui sabotent silencieusement vos résultats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal delay-1">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg>
+        </div>
+        <div class="stat-num" data-count="250">+250</div>
+        <div class="stat-label">entreprises du bâtiment accompagnées partout en France.</div>
+      </div>
+      <div class="stat-card reveal delay-2">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div class="stat-num">5,0 / 5</div>
+        <div class="stat-label">moyenne sur Google — la note maximale, sans exception.</div>
+      </div>
+      <div class="stat-card reveal delay-3">
+        <div class="icon">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="stat-num">+300 000 €</div>
+        <div class="stat-label">générés pour mes clients grâce à mes stratégies digitales.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <div class="ph-tag">LOMIG GUEGUENIAT</div>
+        <div class="silhouette"></div>
+        <div class="ph-card">
+          <div class="name">Fondateur — Payment Flow</div>
+          <div class="role">Acquisition client pour le bâtiment</div>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <span class="eyebrow reveal"><span class="dot"></span>Qui suis-je ?</span>
+        <h2 class="reveal delay-1">Je scale des entreprises du bâtiment depuis 5 ans.</h2>
+
+        <p class="reveal delay-2">
+          Je m'appelle <strong>Lomig Guegueniat</strong>. Depuis plus de 5 ans, je crée des sites et des systèmes d'acquisition pour les artisans du bâtiment qui veulent arrêter de dépendre uniquement du bouche-à-oreille.
+        </p>
+        <p class="reveal delay-2">
+          J'ai accompagné <strong>+250 entreprises</strong>, créé <strong>+150 sites</strong>, et généré plus de <strong>300 000 €</strong> de chiffre d'affaires pour mes clients grâce à des stratégies digitales adaptées à votre métier.
+        </p>
+        <p class="reveal delay-3">
+          Je suis aussi fondateur de <strong>Payment Flow</strong>, un collectif de +10 experts marketing dédiés à une seule chose : faire croître durablement les entreprises ambitieuses.
+        </p>
+
+        <div class="badges">
+          <div class="badge-row reveal delay-3">
+            <div class="b-icon">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div>
+              <div class="b-title">Sites web performants</div>
+              <div class="b-desc">Pensés pour transformer vos visiteurs en demandes de devis.</div>
+            </div>
+          </div>
+          <div class="badge-row reveal delay-4">
+            <div class="b-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="b-title">Acquisition locale</div>
+              <div class="b-desc">Dominez votre zone : être trouvé avant vos concurrents.</div>
+            </div>
+          </div>
+          <div class="badge-row reveal delay-5">
+            <div class="b-icon">
+              <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div class="b-title">Systèmes de croissance</div>
+              <div class="b-desc">Un flux régulier de devis, mois après mois.</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#reserver" class="cta reveal delay-5">
+          Je veux les mêmes résultats
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal"><span class="dot"></span>Ils en parlent mieux que moi</span>
+      <h2 class="reveal delay-1" style="margin-top:18px">Ce qu'en disent les <span class="serif">artisans accompagnés</span></h2>
+      <p class="reveal delay-2">Des retours réels, de gens qui posent du carrelage, tirent des câbles et montent des cloisons toute la journée.</p>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review reveal delay-1">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"Honnêtement j'étais sceptique avec le digital. Lomig m'a fait un site clair et m'a mis en place sa stratégie. 2 mois après je recevais 15 à 20 devis par mois sans bouger le petit doigt. Je suis full booké jusqu'en septembre."</p>
+        <div class="author">
+          <div class="av">JM</div>
+          <div>
+            <div class="who">Jérôme M.</div>
+            <div class="job">Peintre — Rennes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review reveal delay-2">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"Le truc qui change tout c'est qu'il connaît vraiment le métier. J'ai pas eu à lui expliquer ce que c'est un chantier rénovation complète. Il a tout structuré tout seul. Mes devis ont doublé en 3 mois."</p>
+        <div class="author">
+          <div class="av">SK</div>
+          <div>
+            <div class="who">Sébastien K.</div>
+            <div class="job">Carreleur — Nantes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review reveal delay-3">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"J'avais déjà payé 3500€ à une agence avant lui. Résultat zéro. Avec Lomig j'ai compris en 30 min d'appel ce qui clochait sur mon site. Aujourd'hui je passe en première page Google sur ma ville. Demandes de devis quasi tous les jours."</p>
+        <div class="author">
+          <div class="av">TD</div>
+          <div>
+            <div class="who">Thomas D.</div>
+            <div class="job">Électricien — Bordeaux</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review reveal delay-1">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"J'ai monté ma boîte de plaquisterie il y a 2 ans, le téléphone sonnait pas. Lomig m'a refait toute la com et le site. Maintenant j'ai assez de boulot pour embaucher un deuxième gars. C'est concret, simple, et ça marche."</p>
+        <div class="author">
+          <div class="av">YL</div>
+          <div>
+            <div class="who">Yann L.</div>
+            <div class="job">Plaquiste — Brest</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review reveal delay-2">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"On fait de la rénovation complète, devis souvent à +30k€. Avant Lomig, on courait après les chantiers. Maintenant on choisit nos clients. Le site qu'il a fait inspire vraiment confiance, les clients arrivent déjà convaincus."</p>
+        <div class="author">
+          <div class="av">MR</div>
+          <div>
+            <div class="who">Mathieu R.</div>
+            <div class="job">Entreprise rénovation — Lyon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review reveal delay-3">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <p>"Franchement, je m'attendais à un appel commercial pour me vendre un truc. Au final j'ai eu 30 min de vraies recommandations gratuites. J'ai signé ensuite et c'est le meilleur investissement de mon entreprise."</p>
+        <div class="author">
+          <div class="av">PC</div>
+          <div>
+            <div class="who">Pierre C.</div>
+            <div class="job">Menuisier — Tours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="container">
+    <div class="final-inner">
+      <span class="eyebrow reveal"><span class="dot"></span>Dernière étape</span>
+      <h2 class="reveal delay-1">
+        Votre croissance dépend<br/>de votre <span class="serif">système d'acquisition</span>.
+      </h2>
+      <p class="final-text reveal delay-2">
+        Vous pouvez continuer à <strong>attendre le bouche-à-oreille</strong>, espérer le prochain chantier, regarder vos concurrents passer devant vous sur Google…<br/><br/>
+        Ou enfin mettre en place une <strong>machine qui génère des devis régulièrement</strong>, mois après mois, pendant que vous êtes sur chantier.
+      </p>
+      <a href="#reserver" class="cta reveal delay-3">
+        Je passe à l'action maintenant
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <div class="cta-mini reveal delay-4">Audit gratuit — places limitées cette semaine</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">L</div>
+      <span>Lomig Guegueniat</span>
+    </a>
+    <p>© 2026 — Tous droits réservés · Mentions légales · Conditions générales</p>
+  </div>
+</footer>
+
+<script>
+/* Nav scroll style */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>10) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+/* Reveal on scroll */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  });
+},{threshold:.12,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* Form submit (placeholder) */
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('button[type="submit"]');
+  const original=btn.innerHTML;
+  btn.innerHTML='Envoi en cours...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    btn.innerHTML='✓ Demande envoyée — vous serez recontacté';
+    btn.style.background='#16a34a';
+    setTimeout(()=>{
+      btn.innerHTML=original;
+      btn.disabled=false;
+      btn.style.background='';
+      e.target.reset();
+    },3500);
+  },900);
+}
+
+/* Smooth scroll for in-page links */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',ev=>{
+    const id=a.getAttribute('href');
+    if(id.length>1){
+      const t=document.querySelector(id);
+      if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+    }
+  });
+});
+
+/* Stat counter for +250 */
+const counter=document.querySelector('[data-count="250"]');
+if(counter){
+  const obs=new IntersectionObserver((entries,o)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        let n=0;const target=250;const step=Math.ceil(target/40);
+        const t=setInterval(()=>{
+          n+=step;
+          if(n>=target){n=target;clearInterval(t)}
+          counter.textContent='+'+n;
+        },28);
+        o.unobserve(e.target);
+      }
+    });
+  },{threshold:.4});
+  obs.observe(counter);
+}
+</script>
+
+</body>
+</html>
