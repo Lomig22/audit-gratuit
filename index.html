@@ -77,14 +77,9 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
   display:grid;place-items:center;font-weight:800;font-size:14px;
 }
 
-/* ---------- TOP STRIP (subtle, no nav) ---------- */
-.top-strip{
-  padding:24px 0;text-align:center;
-}
-
 /* ---------- HERO (2 columns, compact) ---------- */
 .hero{
-  padding:18px 0 36px;position:relative;overflow:hidden;
+  padding:50px 0 50px;position:relative;overflow:hidden;
 }
 .hero::before{
   content:"";position:absolute;inset:0;
@@ -97,8 +92,36 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
   position:relative;z-index:1;
   display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;
 }
-.hero-left{position:sticky;top:24px}
+.hero-left{display:flex;flex-direction:column;gap:18px}
 .hero-right{display:flex;flex-direction:column;gap:14px}
+
+/* under-video block (fills the gap, reinforces offer) */
+.hero-under{
+  display:flex;flex-direction:column;gap:8px;
+}
+.hero-under-title{
+  font-size:11.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gray-500);
+  display:flex;align-items:center;gap:10px;margin-bottom:4px;
+}
+.hero-under-title::before{
+  content:"";width:18px;height:1px;background:var(--gray-300);
+}
+.hero-bullets{display:flex;flex-direction:column;gap:8px;list-style:none}
+.hero-bullet{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;background:var(--white);
+  border:1px solid var(--gray-200);border-radius:12px;
+  transition:transform .25s var(--t),border-color .25s var(--t),box-shadow .25s var(--t);
+}
+.hero-bullet:hover{transform:translateX(3px);border-color:var(--gray-300);box-shadow:var(--shadow-sm)}
+.hero-bullet .check{
+  flex:0 0 22px;width:22px;height:22px;border-radius:50%;
+  background:var(--ink);display:grid;place-items:center;margin-top:1px;
+}
+.hero-bullet .check svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3}
+.hero-bullet .b-title{font-weight:600;font-size:14px;letter-spacing:-.01em;color:var(--ink)}
+.hero-bullet .b-desc{font-size:12.5px;color:var(--gray-500);margin-top:1px;line-height:1.45}
 
 .hero-right .eyebrow{align-self:flex-start;margin:0}
 
@@ -486,8 +509,7 @@ footer{
   .about-badges{grid-template-columns:1fr;max-width:480px}
 }
 @media(max-width:720px){
-  .top-strip{padding:16px 0}
-  .hero{padding:8px 0 40px}
+  .hero{padding:30px 0 40px}
   h2{font-size:30px}
   .container,.container-sm{padding:0 18px}
   .form-card{padding:20px}
@@ -508,28 +530,45 @@ footer{
 </head>
 <body>
 
-<!-- TOP STRIP (just logo, no nav) -->
-<header class="top-strip">
-  <div class="container">
-    <a href="#" class="logo">
-      <div class="logo-mark">L</div>
-      <span>Lomig Guegueniat</span>
-    </a>
-  </div>
-</header>
-
 <!-- HERO (video left + H1/H2/form right) -->
 <section class="hero" id="reserver">
   <div class="container">
     <div class="hero-grid">
 
-      <!-- LEFT : video -->
-      <div class="hero-left reveal">
-        <div class="video-wrap" onclick="this.classList.add('playing')">
+      <!-- LEFT : video + under-video bullets -->
+      <div class="hero-left">
+        <div class="video-wrap reveal" onclick="this.classList.add('playing')">
           <div class="video-label"><span class="live"></span>Vidéo — 8 min</div>
           <button class="play-btn" aria-label="Lire la vidéo">
             <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
           </button>
+        </div>
+
+        <div class="hero-under reveal delay-2">
+          <div class="hero-under-title">Ce que contient votre audit gratuit</div>
+          <ul class="hero-bullets">
+            <li class="hero-bullet">
+              <div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div>
+                <div class="b-title">Diagnostic complet de votre acquisition</div>
+                <div class="b-desc">Site, visibilité Google, présence locale — on regarde tout.</div>
+              </div>
+            </li>
+            <li class="hero-bullet">
+              <div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div>
+                <div class="b-title">Les erreurs qui bloquent vos devis</div>
+                <div class="b-desc">Les 3 fuites silencieuses qui sabotent vos résultats aujourd'hui.</div>
+              </div>
+            </li>
+            <li class="hero-bullet">
+              <div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div>
+                <div class="b-title">Plan d'action concret en 30 min</div>
+                <div class="b-desc">Vous repartez avec une stratégie claire, applicable dès cette semaine.</div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
 
