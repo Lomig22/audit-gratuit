@@ -810,16 +810,15 @@ body.modal-open{overflow:hidden}
             <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action, que vous bossiez avec moi ensuite ou non.</span>
           </div>
 
-          <form action="https://formsubmit.co/lomig.guegueniat@gmail.com"
+          <form action="https://api.web3forms.com/submit"
                 method="POST"
-                target="formsubmitFrame"
                 onsubmit="handleSubmit(event)"
                 data-source="hero">
-            <input type="hidden" name="_subject" value="Nouvel audit gratuit (formulaire principal)" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_autoresponse" value="Merci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 minutes. À très vite, Lomig." />
+            <input type="hidden" name="access_key" value="cbdf9f0b-d1bf-49ae-9b1a-21351afa73e2" />
+            <input type="hidden" name="subject" value="Nouvel audit gratuit (formulaire principal)" />
+            <input type="hidden" name="from_name" value="Landing Audit — Lomig" />
             <input type="hidden" name="source" value="Formulaire principal (hero)" />
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
 
             <div class="field">
               <input type="text" name="name" id="name" placeholder=" " required autocomplete="name" />
@@ -1246,16 +1245,15 @@ body.modal-open{overflow:hidden}
       <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action.</span>
     </div>
 
-    <form action="https://formsubmit.co/lomig.guegueniat@gmail.com"
+    <form action="https://api.web3forms.com/submit"
           method="POST"
-          target="formsubmitFrame"
           onsubmit="handleSubmit(event)"
           data-source="modal">
-      <input type="hidden" name="_subject" value="Nouvel audit gratuit (popup)" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_autoresponse" value="Merci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 minutes. À très vite, Lomig." />
+      <input type="hidden" name="access_key" value="cbdf9f0b-d1bf-49ae-9b1a-21351afa73e2" />
+      <input type="hidden" name="subject" value="Nouvel audit gratuit (popup)" />
+      <input type="hidden" name="from_name" value="Landing Audit — Lomig" />
       <input type="hidden" name="source" value="Popup modal" />
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
 
       <div class="field">
         <input type="text" name="name" id="modal-name" placeholder=" " required autocomplete="name" />
@@ -1291,9 +1289,6 @@ body.modal-open{overflow:hidden}
     </div>
   </div>
 </div>
-
-<!-- Hidden iframe: receives Formsubmit response so the page stays put -->
-<iframe name="formsubmitFrame" id="formsubmitFrame" style="display:none" title="Form submission"></iframe>
 
 <!-- STICKY CTA (mobile only) -->
 <a href="#reserver" class="sticky-cta" id="stickyCta">
@@ -1354,21 +1349,20 @@ if(stickyCta && heroForm){
   sIo.observe(heroForm);
 }
 
-/* ---------- FORM SUBMISSION (Formsubmit via hidden iframe) ----------
-   The form posts naturally to Formsubmit.co; the response loads into
-   the hidden iframe so the page stays put. We listen for the iframe
-   load event to flip the button into a success state.
-   The FIRST submission triggers a one-time activation email to
-   lomig.guegueniat@gmail.com — clicking the link in that email
-   activates the address for all future submissions.                  */
-function handleSubmit(e){
+/* ---------- FORM SUBMISSION (Web3Forms AJAX) ----------
+   Both forms (hero + modal) POST to api.web3forms.com/submit with
+   the access_key. Web3Forms forwards the email to
+   lomig.guegueniat@gmail.com (no activation step). Botcheck honeypot
+   silently drops spam. Free tier covers 250 submissions / month.    */
+async function handleSubmit(e){
+  e.preventDefault();
   const form=e.target;
   const btn=form.querySelector('button[type="submit"]');
   const original=btn.innerHTML;
 
   /* Personalise the email subject with the prospect's name */
   const nameInput=form.querySelector('input[name="name"]');
-  const subjectInput=form.querySelector('input[name="_subject"]');
+  const subjectInput=form.querySelector('input[name="subject"]');
   if(subjectInput && nameInput && nameInput.value.trim()){
     subjectInput.value=`Nouvel audit gratuit — ${nameInput.value.trim()} (${form.dataset.source||'form'})`;
   }
@@ -1376,12 +1370,18 @@ function handleSubmit(e){
   btn.innerHTML='Envoi en cours…';
   btn.disabled=true;
 
-  const iframe=document.getElementById('formsubmitFrame');
-  let done=false;
+  try{
+    const formData=new FormData(form);
+    const payload=Object.fromEntries(formData);
 
-  const onLoad=()=>{
-    if(done) return;
-    done=true;
+    const res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json();
+    if(!data.success) throw new Error(data.message||'Submission failed');
+
     btn.innerHTML='✓ Demande envoyée — je vous recontacte sous 24h';
     btn.style.background='#16a34a';
     setTimeout(()=>{
@@ -1391,14 +1391,8 @@ function handleSubmit(e){
       btn.style.background='';
       if(form.dataset.source==='modal') closeModal();
     },3500);
-  };
-  iframe.addEventListener('load',onLoad,{once:true});
-
-  /* Safety net: if no response in 12 s, surface an error */
-  setTimeout(()=>{
-    if(done) return;
-    done=true;
-    iframe.removeEventListener('load',onLoad);
+  }catch(err){
+    console.error('Form submission error:',err);
     btn.innerHTML='Erreur — réessayez dans un instant';
     btn.style.background='#dc2626';
     setTimeout(()=>{
@@ -1406,9 +1400,7 @@ function handleSubmit(e){
       btn.disabled=false;
       btn.style.background='';
     },3000);
-  },12000);
-
-  /* IMPORTANT: do NOT preventDefault — let the form post to the iframe */
+  }
 }
 
 /* ---------- REVEAL ON SCROLL ---------- */
