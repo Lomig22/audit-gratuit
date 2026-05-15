@@ -810,7 +810,17 @@ body.modal-open{overflow:hidden}
             <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action, que vous bossiez avec moi ensuite ou non.</span>
           </div>
 
-          <form onsubmit="handleSubmit(event)" data-source="hero">
+          <form action="https://formsubmit.co/lomig.guegueniat@gmail.com"
+                method="POST"
+                target="formsubmitFrame"
+                onsubmit="handleSubmit(event)"
+                data-source="hero">
+            <input type="hidden" name="_subject" value="Nouvel audit gratuit (formulaire principal)" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_autoresponse" value="Merci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 minutes. À très vite, Lomig." />
+            <input type="hidden" name="source" value="Formulaire principal (hero)" />
+
             <div class="field">
               <input type="text" name="name" id="name" placeholder=" " required autocomplete="name" />
               <label for="name">Nom & prénom</label>
@@ -1236,7 +1246,17 @@ body.modal-open{overflow:hidden}
       <span><strong>Aucune vente pendant l'appel.</strong> C'est de l'audit pur — vous repartez avec votre plan d'action.</span>
     </div>
 
-    <form onsubmit="handleSubmit(event)" data-source="modal">
+    <form action="https://formsubmit.co/lomig.guegueniat@gmail.com"
+          method="POST"
+          target="formsubmitFrame"
+          onsubmit="handleSubmit(event)"
+          data-source="modal">
+      <input type="hidden" name="_subject" value="Nouvel audit gratuit (popup)" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_autoresponse" value="Merci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 minutes. À très vite, Lomig." />
+      <input type="hidden" name="source" value="Popup modal" />
+
       <div class="field">
         <input type="text" name="name" id="modal-name" placeholder=" " required autocomplete="name" />
         <label for="modal-name">Nom & prénom</label>
@@ -1271,6 +1291,9 @@ body.modal-open{overflow:hidden}
     </div>
   </div>
 </div>
+
+<!-- Hidden iframe: receives Formsubmit response so the page stays put -->
+<iframe name="formsubmitFrame" id="formsubmitFrame" style="display:none" title="Form submission"></iframe>
 
 <!-- STICKY CTA (mobile only) -->
 <a href="#reserver" class="sticky-cta" id="stickyCta">
@@ -1331,41 +1354,35 @@ if(stickyCta && heroForm){
   sIo.observe(heroForm);
 }
 
-/* ---------- FORM SUBMISSION (Formsubmit.co AJAX) ---------- */
-/* Both forms (hero + modal) post to lomig.guegueniat@gmail.com.
-   First submission triggers a one-time confirmation email — click
-   the link inside it and all subsequent submissions flow through. */
-const FORMSUBMIT_ENDPOINT='https://formsubmit.co/ajax/lomig.guegueniat@gmail.com';
-
-async function handleSubmit(e){
-  e.preventDefault();
+/* ---------- FORM SUBMISSION (Formsubmit via hidden iframe) ----------
+   The form posts naturally to Formsubmit.co; the response loads into
+   the hidden iframe so the page stays put. We listen for the iframe
+   load event to flip the button into a success state.
+   The FIRST submission triggers a one-time activation email to
+   lomig.guegueniat@gmail.com — clicking the link in that email
+   activates the address for all future submissions.                  */
+function handleSubmit(e){
   const form=e.target;
   const btn=form.querySelector('button[type="submit"]');
   const original=btn.innerHTML;
+
+  /* Personalise the email subject with the prospect's name */
+  const nameInput=form.querySelector('input[name="name"]');
+  const subjectInput=form.querySelector('input[name="_subject"]');
+  if(subjectInput && nameInput && nameInput.value.trim()){
+    subjectInput.value=`Nouvel audit gratuit — ${nameInput.value.trim()} (${form.dataset.source||'form'})`;
+  }
+
   btn.innerHTML='Envoi en cours…';
   btn.disabled=true;
 
-  const data=new FormData(form);
-  const payload={
-    name:data.get('name'),
-    email:data.get('email'),
-    telephone:data.get('phone'),
-    source:form.dataset.source||'inconnu',
-    _subject:`Nouveau audit gratuit — ${data.get('name')||'sans nom'}`,
-    _template:'table',
-    _captcha:'false',
-    _autoresponse:`Bonjour ${data.get('name')||''},\n\nMerci pour votre demande d'audit. Je vous rappelle personnellement sous 24h pour bloquer ensemble un créneau de 30 min.\n\nÀ très vite,\nLomig`
-  };
+  const iframe=document.getElementById('formsubmitFrame');
+  let done=false;
 
-  try{
-    const res=await fetch(FORMSUBMIT_ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    if(!res.ok) throw new Error('Submission failed');
-
-    btn.innerHTML='✓ Demande envoyée — vous serez recontacté sous 24h';
+  const onLoad=()=>{
+    if(done) return;
+    done=true;
+    btn.innerHTML='✓ Demande envoyée — je vous recontacte sous 24h';
     btn.style.background='#16a34a';
     setTimeout(()=>{
       form.reset();
@@ -1374,7 +1391,14 @@ async function handleSubmit(e){
       btn.style.background='';
       if(form.dataset.source==='modal') closeModal();
     },3500);
-  }catch(err){
+  };
+  iframe.addEventListener('load',onLoad,{once:true});
+
+  /* Safety net: if no response in 12 s, surface an error */
+  setTimeout(()=>{
+    if(done) return;
+    done=true;
+    iframe.removeEventListener('load',onLoad);
     btn.innerHTML='Erreur — réessayez dans un instant';
     btn.style.background='#dc2626';
     setTimeout(()=>{
@@ -1382,7 +1406,9 @@ async function handleSubmit(e){
       btn.disabled=false;
       btn.style.background='';
     },3000);
-  }
+  },12000);
+
+  /* IMPORTANT: do NOT preventDefault — let the form post to the iframe */
 }
 
 /* ---------- REVEAL ON SCROLL ---------- */
