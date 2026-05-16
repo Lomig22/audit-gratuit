@@ -168,22 +168,31 @@ h3{font-size:clamp(20px,2vw,24px);font-weight:700}
   position:relative;border-radius:var(--radius-lg);overflow:hidden;
   aspect-ratio:16/9;background:#0a0a0a;
   box-shadow:var(--shadow-xl);
-  cursor:pointer;
   transition:transform .5s var(--t);
 }
 .video-wrap:hover{transform:translateY(-3px)}
 .video-wrap::before{
-  content:"";position:absolute;inset:0;
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
     linear-gradient(135deg,#1a1a1a,#0a0a0a 60%),
     radial-gradient(circle at 30% 30%,rgba(255,255,255,.06),transparent 50%);
 }
 .video-wrap::after{
-  content:"";position:absolute;inset:0;
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(circle at 50% 50%,rgba(255,255,255,.08),transparent 40%),
     repeating-linear-gradient(45deg,transparent 0 30px,rgba(255,255,255,.015) 30px 31px);
 }
+.video-wrap video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:1;background:#0a0a0a;
+}
+.video-poster{
+  position:absolute;inset:0;z-index:2;
+  display:grid;place-items:center;cursor:pointer;
+  transition:opacity .45s var(--t);
+}
+.video-wrap.playing .video-poster{opacity:0;pointer-events:none}
 .play-btn{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:78px;height:78px;border-radius:50%;background:var(--white);
@@ -754,11 +763,17 @@ body.modal-open{overflow:hidden}
 
       <!-- MEDIA : video + under-video bullets (left col desktop, after copy on mobile) -->
       <div class="hero-media">
-        <div class="video-wrap reveal" onclick="this.classList.add('playing')">
-          <div class="video-label"><span class="live"></span>Vidéo — 8 min</div>
-          <button class="play-btn" aria-label="Lire la vidéo">
-            <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
-          </button>
+        <div class="video-wrap reveal" id="videoWrap">
+          <video id="vslVideo" controls preload="metadata" playsinline poster="">
+            <source src="vsl.mp4" type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </video>
+          <div class="video-poster" id="videoPoster">
+            <div class="video-label"><span class="live"></span>Vidéo — 4 min</div>
+            <button class="play-btn" type="button" aria-label="Lire la vidéo">
+              <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
+            </button>
+          </div>
         </div>
 
         <div class="hero-under reveal delay-2">
@@ -1354,6 +1369,21 @@ document.addEventListener('click',ev=>{
     if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
   }
 });
+
+/* ---------- VSL VIDEO: poster click -> play ---------- */
+const vslVideo=document.getElementById('vslVideo');
+const videoWrap=document.getElementById('videoWrap');
+const videoPoster=document.getElementById('videoPoster');
+if(vslVideo && videoWrap && videoPoster){
+  videoPoster.addEventListener('click',()=>{
+    videoWrap.classList.add('playing');
+    vslVideo.play().catch(()=>{});
+  });
+  vslVideo.addEventListener('ended',()=>{
+    videoWrap.classList.remove('playing');
+    vslVideo.currentTime=0;
+  });
+}
 
 /* ---------- STICKY CTA visibility ---------- */
 const stickyCta=document.getElementById('stickyCta');
