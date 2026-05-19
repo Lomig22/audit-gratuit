@@ -670,10 +670,7 @@ footer{
   align-items:center;justify-content:center;gap:10px;
   box-shadow:0 14px 38px rgba(10,10,10,.4);
   text-decoration:none;
-  transform:translateY(140%);opacity:0;
-  transition:transform .4s var(--t),opacity .3s var(--t);
 }
-.sticky-cta.visible{transform:translateY(0);opacity:1}
 .sticky-cta .dot-g{
   width:7px;height:7px;border-radius:50%;background:#22c55e;
   box-shadow:0 0 0 4px rgba(34,197,94,.25);animation:pulse 2s infinite;
@@ -1420,18 +1417,6 @@ if(vslVideo && videoWrap && videoPoster){
     videoWrap.classList.remove('playing');
     vslVideo.currentTime=0;
   });
-}
-
-/* ---------- STICKY CTA visibility ---------- */
-const stickyCta=document.getElementById('stickyCta');
-const heroForm=document.querySelector('.hero .form-card');
-if(stickyCta && heroForm){
-  const sIo=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      stickyCta.classList.toggle('visible',!e.isIntersecting);
-    });
-  },{threshold:0.15});
-  sIo.observe(heroForm);
 }
 
 /* ---------- FORM SUBMISSION (Web3Forms AJAX) ----------
