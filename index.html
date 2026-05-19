@@ -1364,16 +1364,14 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && modal.classList.contains('open')) closeModal();
 });
 
-/* ---------- AUTO-OPEN MODAL on MOBILE after 2s (once per session) ---------- */
-/* Engages mobile visitors who haven't interacted yet. Shown once per
-   browser session — if the user closes it, it won't pop up again. */
+/* ---------- AUTO-OPEN MODAL on MOBILE after 2s ---------- */
+/* Fires on every page load: 2 s after a mobile visitor lands, the
+   contact modal opens automatically. They can close it normally. */
 (function(){
   if(!window.matchMedia('(max-width: 720px)').matches) return;
-  try{ if(sessionStorage.getItem('autoModalShown')) return; }catch(_){ /* sessionStorage may be blocked */ }
   setTimeout(()=>{
     if(modal.classList.contains('open')) return; /* user opened it themselves */
     openModal();
-    try{ sessionStorage.setItem('autoModalShown','1'); }catch(_){}
   },2000);
 })();
 
