@@ -1452,6 +1452,11 @@ async function handleSubmit(e){
     const data=await res.json();
     if(!data.success) throw new Error(data.message||'Submission failed');
 
+    /* GTM: fires once per SUCCESSFUL submission only — never on
+       validation, network or server errors (those hit the catch). */
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'form_submit_success' });
+
     btn.innerHTML='✓ Demande envoyée — je vous recontacte sous 24h';
     btn.style.background='#16a34a';
     setTimeout(()=>{
