@@ -144,6 +144,7 @@ h3{font-size:17px}
 .btn-main svg{transition:transform .25s var(--t)}
 .btn-main:hover svg{transform:translateX(4px)}
 .btn-note{margin-top:14px;font-size:13px;color:var(--gray-500)}
+.booking{margin:40px auto 0;max-width:900px;width:100%;scroll-margin-top:20px}
 
 /* ---------- ÉTUDES DE CAS + TÉMOIGNAGES ---------- */
 .testimonials{padding:80px 0 90px;background:var(--white);border-top:1px solid var(--gray-200);text-align:center}
@@ -359,12 +360,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       })(window, document, 'Vidalytics', 'vidalytics_embed_CQJVSGP8UYL_hAkC', 'https://fast.vidalytics.com/embeds/ashsC2C8/CQJVSGP8UYL_hAkC/');
       </script>
     </div>
-
-    <a href="#reserver" class="btn-main reveal delay-3">
-      Je réserve mon appel gratuit
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </a>
-    <p class="btn-note reveal delay-3">Gratuit · Sans engagement · Rappel sous 24h</p>
+    <!-- Prise de RDV : widget iClosed (remplace l'ancien bouton) -->
+    <div class="booking" id="reserver">
+      <!-- iClosed inline widget begin -->
+      <div class="iclosed-widget" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"></div>
+      <script type="text/javascript" src="https://app.iclosed.io/assets/widget.js" async></script>
+      <!-- iClosed inline widget end -->
+    </div>
   </div>
 </section>
 
@@ -623,8 +625,10 @@ document.addEventListener('click',ev=>{
   if(!a) return;
   const id=a.getAttribute('href');
   if(id==='#reserver'){
+    /* tous les CTA descendent vers le widget iClosed sous la vidéo */
     ev.preventDefault();
-    openModal();
+    document.getElementById('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+    if(window.dataLayer) dataLayer.push({event:'cta_click_booking'});
     return;
   }
   if(id.length>1){
