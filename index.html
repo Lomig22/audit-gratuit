@@ -198,6 +198,9 @@ h3{font-size:17px}
 .lt-body{padding:16px 18px 20px}
 .lt-title{font-size:16.5px;font-weight:700;line-height:1.35;letter-spacing:-.01em}
 .testimonials .btn-main{margin-top:44px}
+/* CTA de marque : dégradé noir -> bleu (hors bouton sous la VSL) */
+.testimonials .btn-main{background:linear-gradient(90deg,var(--ink) 0%,var(--blue) 100%);box-shadow:0 14px 34px rgba(31,91,255,.28)}
+.testimonials .btn-main:hover{box-shadow:0 18px 42px rgba(31,91,255,.38)}
 
 /* ---------- FOOTER ---------- */
 footer{padding:36px 0 44px;background:var(--ink);color:rgba(255,255,255,.55);text-align:center}
@@ -289,10 +292,10 @@ form{display:flex;flex-direction:column;gap:9px}
 .sticky-cta{
   display:none;
   position:fixed;left:12px;right:12px;bottom:14px;z-index:90;
-  padding:15px 22px;background:var(--ink);color:var(--white);
+  padding:15px 22px;background:linear-gradient(90deg,var(--ink) 0%,var(--blue) 100%);color:var(--white);
   border-radius:14px;font-weight:600;font-size:14.5px;
   align-items:center;justify-content:center;gap:10px;
-  box-shadow:0 14px 38px rgba(10,10,10,.4);
+  box-shadow:0 14px 38px rgba(31,91,255,.35);
 }
 .sticky-cta .dot-g{
   width:7px;height:7px;border-radius:50%;background:#22c55e;
