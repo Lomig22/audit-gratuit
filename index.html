@@ -335,6 +335,14 @@ form{display:flex;flex-direction:column;gap:9px}
   .sticky-cta{display:inline-flex}
   body{padding-bottom:80px}
 }
+
+/* ---------- POP-UP iCLOSED : tient dans l'écran visible (100dvh = sans la barre d'adresse mobile) ---------- */
+.iclosed-popup-overlay.iclosed-popup-overlay{height:100vh !important;height:100dvh !important}
+.iclosed-popup-overlay .iclosed-popup-container{height:calc(100vh - 40px);height:calc(100dvh - 40px);max-height:900px;width:94%;border-radius:16px;overflow:hidden}
+.iclosed-popup-overlay .iclosed-popup-content{height:100%}
+@media(max-width:720px){
+  .iclosed-popup-overlay .iclosed-popup-container{width:calc(100% - 20px);height:calc(100vh - 20px);height:calc(100dvh - 20px);max-height:none;border-radius:14px}
+}
 </style>
 </head>
 <body>
@@ -523,10 +531,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </article>
     </div>
 
-    <a href="#reserver" class="btn-main reveal">
+    <button type="button" class="btn-main reveal js-booking-popup" data-iclosed-link="https://app.iclosed.io/e/lomig/vsl-funnel" data-embed-type="popup">
       Je veux les mêmes résultats
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </a>
+    </button>
   </div>
 </section>
 
@@ -700,7 +708,7 @@ async function handleSubmit(e){
 }
 
 /* bouton figé : le pop-up est ouvert par iClosed, on trace juste le clic */
-document.getElementById('stickyCta').addEventListener('click',()=>{if(window.dataLayer)dataLayer.push({event:'cta_click_booking_popup'});});
+document.querySelectorAll('#stickyCta,.js-booking-popup').forEach(b=>b.addEventListener('click',()=>{if(window.dataLayer)dataLayer.push({event:'cta_click_booking_popup',cta:b.id||'temoignages'});}));
 
 /* ---------- REVEAL ON SCROLL ---------- */
 /* ---------- ÉTUDES DE CAS / TÉMOIGNAGES : miniature -> lecture (une seule vidéo à la fois) ---------- */
