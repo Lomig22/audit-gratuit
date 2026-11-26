@@ -299,18 +299,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       +50 000 € de chiffre d'affaires par mois, <span class="guarantee">garanti</span>.
     </h1>
 
-    <div class="video-wrap reveal delay-2" id="videoWrap">
-      <!-- VSL : remplacer vsl.mp4 (et poster.jpg) par la nouvelle vidéo -->
-      <video id="vslVideo" controls preload="metadata" playsinline poster="poster.jpg">
-        <source src="vsl.mp4" type="video/mp4" />
-        Votre navigateur ne supporte pas la lecture vidéo.
-      </video>
-      <div class="video-poster" id="videoPoster">
-        <div class="video-label"><span class="live"></span>Regardez la vidéo</div>
-        <button class="play-btn" type="button" aria-label="Lire la vidéo">
-          <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
-        </button>
-      </div>
+    <!-- VSL hébergée sur Vidalytics (VSL_1.0) — le ratio est géré par l'embed (padding-top) -->
+    <div class="video-wrap reveal delay-2" id="videoWrap" style="aspect-ratio:auto">
+      <div id="vidalytics_embed_CQJVSGP8UYL_hAkC" style="width: 100%; position:relative; padding-top: 62.5%;"></div>
+      <script type="text/javascript">
+      (function (v, i, d, a, l, y, t, c, s) {
+          y='_'+d.toLowerCase();c=d+'L';if(!v[d]){v[d]={};}if(!v[c]){v[c]={};}if(!v[y]){v[y]={};}var vl='Loader',vli=v[y][vl],vsl=v[c][vl + 'Script'],vlf=v[c][vl + 'Loaded'],ve='Embed';
+          if (!vsl){vsl=function(u,cb){
+              if(t){cb();return;}s=i.createElement("script");s.type="text/javascript";s.async=1;s.src=u;
+              if(s.readyState){s.onreadystatechange=function(){if(s.readyState==="loaded"||s.readyState=="complete"){s.onreadystatechange=null;vlf=1;cb();}};}else{s.onload=function(){vlf=1;cb();};}
+              i.getElementsByTagName("head")[0].appendChild(s);
+          };}
+          vsl(l+'loader.min.js',function(){if(!vli){var vlc=v[c][vl];vli=new vlc();}vli.loadScript(l+'player.min.js',function(){var vec=v[d][ve];t=new vec();t.run(a);});});
+      })(window, document, 'Vidalytics', 'vidalytics_embed_CQJVSGP8UYL_hAkC', 'https://fast.vidalytics.com/embeds/ashsC2C8/CQJVSGP8UYL_hAkC/');
+      </script>
     </div>
 
     <a href="#reserver" class="btn-main reveal delay-3">
@@ -479,21 +481,6 @@ document.addEventListener('click',ev=>{
     if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
   }
 });
-
-/* ---------- VSL VIDEO: poster click -> play ---------- */
-const vslVideo=document.getElementById('vslVideo');
-const videoWrap=document.getElementById('videoWrap');
-const videoPoster=document.getElementById('videoPoster');
-if(vslVideo && videoWrap && videoPoster){
-  videoPoster.addEventListener('click',()=>{
-    videoWrap.classList.add('playing');
-    vslVideo.play().catch(()=>{});
-  });
-  vslVideo.addEventListener('ended',()=>{
-    videoWrap.classList.remove('playing');
-    vslVideo.currentTime=0;
-  });
-}
 
 /* ---------- FORM SUBMISSION (Web3Forms AJAX) ----------
    The modal form POSTs to api.web3forms.com/submit with the
