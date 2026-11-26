@@ -153,10 +153,10 @@ h3{font-size:17px}
 .cs-grid,.lt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:44px;text-align:left}
 .cs{
   display:flex;flex-direction:column;gap:16px;padding:18px 18px 22px;
-  background:var(--white);border:1px solid var(--gray-200);border-radius:22px;box-shadow:var(--shadow-sm);
+  background:var(--white);border:0;border-radius:22px;box-shadow:var(--shadow);
   transition:transform .45s var(--t),box-shadow .45s var(--t),border-color .45s var(--t);
 }
-.cs:hover,.lt:hover{transform:translateY(-4px);border-color:rgba(31,91,255,.35);box-shadow:0 24px 60px -30px rgba(31,91,255,.45)}
+.cs:hover,.lt:hover{transform:translateY(-4px);box-shadow:0 24px 60px -30px rgba(31,91,255,.45)}
 .cs[hidden]{display:none}
 .cs-head{display:grid;grid-template-columns:1fr auto;align-items:baseline;column-gap:12px;padding:0 2px}
 .cs-name{font-size:24px;font-weight:800;letter-spacing:-.03em}
@@ -164,6 +164,8 @@ h3{font-size:17px}
 .cs-niche{grid-column:1/-1;margin-top:4px;font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-500)}
 .cs-media,.lt-media{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0a0a0a}
 .lt-media{aspect-ratio:1.91/1;border-radius:0}
+.cs-media{background:#f1f4f9}
+.cs-media img{inset:-3px;width:calc(100% + 6px);height:calc(100% + 6px)}
 .cs-media img,.lt-media img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;transition:transform .6s var(--t)}
 .vid-facade{position:absolute;inset:0;width:100%;height:100%;display:block;padding:0;overflow:hidden}
 .vid-facade:hover img{transform:scale(1.03)}
@@ -192,11 +194,9 @@ h3{font-size:17px}
 .cs-more-wrap{margin-top:28px}
 .btn-ghost{padding:13px 22px;border-radius:999px;font-size:15px;font-weight:600;color:var(--ink);background:var(--white);border:1px solid var(--gray-300);transition:border-color .25s,background .25s}
 .btn-ghost:hover{border-color:var(--ink);background:var(--gray-50)}
-.lt{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--gray-200);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-sm);transition:transform .45s var(--t),box-shadow .45s var(--t),border-color .45s var(--t)}
+.lt{display:flex;flex-direction:column;background:var(--white);border:0;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);transition:transform .45s var(--t),box-shadow .45s var(--t)}
 .lt-body{padding:16px 18px 20px}
 .lt-title{font-size:16.5px;font-weight:700;line-height:1.35;letter-spacing:-.01em}
-.lt-who{margin-top:6px;font-size:13.5px;color:var(--gray-500)}
-.lt-who b{color:var(--ink);font-weight:600}
 .testimonials .btn-main{margin-top:44px}
 
 /* ---------- FOOTER ---------- */
@@ -482,7 +482,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </article>
     </div>
-    <div class="cs-more-wrap"><button type="button" class="btn-ghost" id="csMore">Voir toutes les études de cas (9)</button></div>
+    <div class="cs-more-wrap"><button type="button" class="btn-ghost" id="csMore">Voir toutes les études de cas</button></div>
   </div>
 </section>
 
@@ -498,19 +498,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="lt-media"><span class="cs-dur">7:37</span>
           <button type="button" class="vid-facade" data-mp4="temoignages/franck-long.mp4" aria-label="Lire le témoignage anonyme (couvreur)"><img src="temoignages/franck-long.jpg" alt="Témoignage client anonyme : 5 700 € signés en moins de 7 jours" loading="lazy" width="1000" height="523"><span class="play-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></span></button>
         </div>
-        <div class="lt-body"><p class="lt-title">5 700 € signés en moins de 7 jours</p><p class="lt-who"><b>Témoignage anonyme</b> · Couverture</p></div>
+        <div class="lt-body"><p class="lt-title">5 700 € signés en moins de 7 jours</p></div>
       </article>
       <article class="lt reveal delay-1">
         <div class="lt-media"><span class="cs-dur">2:50</span>
           <button type="button" class="vid-facade" data-mp4="temoignages/axel-long.mp4" aria-label="Lire le témoignage de Axel"><img src="temoignages/axel-long.jpg" alt="Témoignage client de Axel : 10 mois avec nous : son avis cash" loading="lazy" width="1000" height="523"><span class="play-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></span></button>
         </div>
-        <div class="lt-body"><p class="lt-title">10 mois avec nous : son avis cash</p><p class="lt-who"><b>Axel</b> · Rénovation tous corps d&#x27;état</p></div>
+        <div class="lt-body"><p class="lt-title">10 mois avec nous : son avis cash</p></div>
       </article>
       <article class="lt reveal delay-2">
         <div class="lt-media"><span class="cs-dur">1:39</span>
           <button type="button" class="vid-facade" data-mp4="temoignages/romain-long.mp4" aria-label="Lire le témoignage de Romain"><img src="temoignages/romain-long.jpg" alt="Témoignage client de Romain : « Vous êtes carrés » : son avis après notre accompagnement" loading="lazy" width="1000" height="523"><span class="play-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></span></button>
         </div>
-        <div class="lt-body"><p class="lt-title">« Vous êtes carrés » : son avis après notre accompagnement</p><p class="lt-who"><b>Romain</b> · École de piano</p></div>
+        <div class="lt-body"><p class="lt-title">« Vous êtes carrés » : son avis après notre accompagnement</p></div>
       </article>
     </div>
 
