@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+/* Paramètres transmis par iClosed après la réservation (nom, email, téléphone, id de l'invité).
+   On les lit, puis on les retire de l'URL AVANT GTM / pixel pour ne pas envoyer de données perso en clair
+   dans les page views (les UTM sont conservés). */
+(function(){try{
+  var q=new URLSearchParams(location.search),g=function(){for(var i=0;i<arguments.length;i++){var v=q.get(arguments[i]);if(v)return v;}return '';};
+  var ans=g('answer_1');
+  window.__booking={
+    uuid:g('invitee_uuid'),
+    name:g('invitee_full_name'),
+    email:g('Invitee_email','invitee_email')||(ans.indexOf('@')>0?ans:''),
+    phone:g('text_reminder_number')||(ans&&ans.indexOf('@')<0?ans:'')
+  };
+  var pii=['invitee_full_name','Invitee_email','invitee_email','text_reminder_number','answer_1','invitee_uuid'],changed=false;
+  pii.forEach(function(k){if(q.has(k)){q.delete(k);changed=true;}});
+  if(changed&&history.replaceState){var qs=q.toString();history.replaceState(null,'',location.pathname+(qs?'?'+qs:'')+location.hash);}
+}catch(e){window.__booking={};}})();
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QNCBPPE933"></script>
 <script>
@@ -20,6 +38,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-5X79B624');</script>
 <!-- End Google Tag Manager -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1870821831034824');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1870821831034824&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<script>
+/* Cookie _fbc créé à partir du fbclid de l'URL (clic sur une pub Meta) s'il n'existe pas encore — 90 jours */
+(function(){try{var c=new URLSearchParams(location.search).get('fbclid');
+if(c&&!/(?:^|; )_fbc=/.test(document.cookie)){document.cookie='_fbc=fb.1.'+Date.now()+'.'+encodeURIComponent(c)+'; max-age=7776000; path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');}}catch(e){}})();
+</script>
 <title>Rendez-vous confirmé — Lomig Guegueniat</title>
 <meta name="robots" content="noindex" />
 <meta name="description" content="Votre audit d'acquisition offert est réservé. Regardez la vidéo avant notre appel." />
@@ -591,6 +631,28 @@ const io=new IntersectionObserver((entries)=>{
 },{threshold:.12,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+/* ---------- META : événement Schedule (navigateur + API Conversions, même event_id = dédupliqué) ----------
+   Ne part que si la page a été ouverte par une vraie réservation iClosed (paramètres présents). */
+(function(){
+  var b=window.__booking||{};
+  if(!b.uuid&&!b.email&&!b.phone) return;
+  var rnd=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Date.now()+'-'+Math.random().toString(36).slice(2));
+  var eventId='schedule-'+(b.uuid||rnd);
+  try{if(sessionStorage.getItem(eventId))return;sessionStorage.setItem(eventId,'1');}catch(e){}
+  /* trackSingle : uniquement vers le pixel 1870821831034824 (GTM charge aussi un ancien pixel) */
+  try{if(window.fbq)fbq('trackSingle','1870821831034824','Schedule',{},{eventID:eventId});}catch(e){}
+  var ck=function(n){var m=document.cookie.match('(?:^|; )'+n+'=([^;]*)');return m?decodeURIComponent(m[1]):'';};
+  var send=function(){
+    try{
+      fetch('../api/capi',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({event_name:'Schedule',event_id:eventId,event_source_url:location.origin+location.pathname,
+          email:b.email,phone:b.phone,full_name:b.name,external_id:b.uuid,fbp:ck('_fbp'),fbc:ck('_fbc')})
+      }).catch(function(){});
+    }catch(e){}
+  };
+  /* on laisse jusqu'à 2 s au pixel pour poser le cookie _fbp, sans jamais bloquer la page */
+  var tries=0;(function wait(){if(ck('_fbp')||tries++>=10)send();else setTimeout(wait,200);})();
+})();
 document.getElementById('ytLink').addEventListener('click',()=>{if(window.dataLayer)dataLayer.push({event:'youtube_click'});});
 
 </script>
