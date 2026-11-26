@@ -301,6 +301,7 @@ form{display:flex;flex-direction:column;gap:9px}
   border-radius:14px;font-weight:600;font-size:14.5px;
   align-items:center;justify-content:center;gap:10px;
   box-shadow:0 14px 38px rgba(31,91,255,.35);
+  font-family:inherit;border:0;cursor:pointer;
 }
 .sticky-cta .dot-g{
   width:7px;height:7px;border-radius:50%;background:#22c55e;
@@ -589,11 +590,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <!-- STICKY CTA (mobile only) -->
-<a href="#reserver" class="sticky-cta" id="stickyCta">
+<button type="button" class="sticky-cta" id="stickyCta" data-iclosed-link="https://app.iclosed.io/e/lomig/vsl-funnel" data-embed-type="popup">
   <span class="dot-g"></span>
   Je réserve mon appel gratuit
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-</a>
+</button>
 
 <script>
 /* ---------- MODAL ---------- */
@@ -697,6 +698,9 @@ async function handleSubmit(e){
     },3000);
   }
 }
+
+/* bouton figé : le pop-up est ouvert par iClosed, on trace juste le clic */
+document.getElementById('stickyCta').addEventListener('click',()=>{if(window.dataLayer)dataLayer.push({event:'cta_click_booking_popup'});});
 
 /* ---------- REVEAL ON SCROLL ---------- */
 /* ---------- ÉTUDES DE CAS / TÉMOIGNAGES : miniature -> lecture (une seule vidéo à la fois) ---------- */
