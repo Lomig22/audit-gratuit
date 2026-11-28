@@ -175,6 +175,9 @@ h3{font-size:17px}
 .booking{margin:32px auto 0;max-width:900px;width:100%;scroll-margin-top:20px}
 /* emplacement réservé du calendrier tant qu'iClosed n'est pas chargé (hauteur fixée dans le HTML) */
 .iclosed-widget-lazy{background:var(--white);border:1px solid var(--gray-200);border-radius:16px;display:flex;align-items:flex-start;justify-content:center;padding-top:72px}
+/* hauteur réservée du calendrier (iClosed l'ajuste ensuite lui-même via un style inline) */
+#reserver > div{height:620px}
+@media(max-width:720px){#reserver > div{height:861px}}
 .cal-loading{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gray-500)}
 .cal-spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);border-top-color:var(--blue);animation:cal-spin .8s linear infinite}
 @keyframes cal-spin{to{transform:rotate(360deg)}}
@@ -374,7 +377,7 @@ footer p{font-size:13px}
     <!-- Prise de RDV : widget iClosed (remplace l'ancien bouton) -->
     <div class="booking" id="reserver">
       <!-- iClosed inline widget begin -->
-      <div class="iclosed-widget-lazy" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"><div class="cal-loading" role="status"><span class="cal-spinner" aria-hidden="true"></span>Chargement du calendrier…</div></div>
+      <div class="iclosed-widget-lazy" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%"><div class="cal-loading" role="status"><span class="cal-spinner" aria-hidden="true"></span>Chargement du calendrier…</div></div>
       <!-- iClosed inline widget end -->
     </div>
   </div>
@@ -572,7 +575,7 @@ document.addEventListener('click',ev=>{
 });
 
 /* ---------- iCLOSED : jamais avant l'événement load (priorité à la VSL), puis au premier geste
-   du visiteur OU automatiquement 3 s après load, selon ce qui arrive en premier ---------- */
+   du visiteur OU automatiquement 0,5 s après load (VSL lancée), selon ce qui arrive en premier ---------- */
 const loadIclosed=(()=>{
   let wanted=false, loaded=false, timer=null;
   const box=document.querySelector('.iclosed-widget-lazy');
@@ -590,7 +593,18 @@ const loadIclosed=(()=>{
   /* geste ou clic avant load : mémorisé, exécuté dès que load arrive */
   function request(){ wanted=true; if(pageLoaded()) inject(); }
   evs.forEach(e=>addEventListener(e,request,{passive:true}));
-  const onLoad=()=>{ if(wanted) inject(); else timer=setTimeout(inject,3000); };
+  /* chargement automatique : 0,5 s après load, mais seulement une fois la VSL lancée
+     (sinon iClosed concurrence son premier segment vidéo) ; au plus tard 3 s après load
+     si la lecture automatique est bloquée (mode économie d'énergie, etc.) */
+  let vslPlaying=false, after500=false;
+  const wrap=document.getElementById('videoWrap');
+  if(wrap) wrap.addEventListener('playing',()=>{vslPlaying=true; if(after500) inject();},{capture:true,once:true});
+  const onLoad=()=>{
+    if(wanted) return inject();
+    if(!wrap) vslPlaying=true;
+    setTimeout(()=>{after500=true; if(vslPlaying) inject();},500);
+    timer=setTimeout(inject,3000);
+  };
   if(pageLoaded()) onLoad(); else addEventListener('load',onLoad,{once:true});
   return request;
 })();
