@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QNCBPPE933"></script>
+<!-- Google tag (gtag.js) : la bibliothèque est chargée après l'événement load (voir en bas de page) -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -34,22 +33,27 @@ src="https://www.facebook.com/tr?id=1870821831034824&ev=PageView&noscript=1"
 (function(){try{var c=new URLSearchParams(location.search).get('fbclid');
 if(c&&!/(?:^|; )_fbc=/.test(document.cookie)){document.cookie='_fbc=fb.1.'+Date.now()+'.'+encodeURIComponent(c)+'; max-age=7776000; path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');}}catch(e){}})();
 </script>
-<title>Lomig Guegueniat — +50 000 € de chiffre d'affaires par mois, garanti</title>
+<title>+50 000 € de CA par mois : la méthode | Lomig Guéguéniat</title>
 <meta name="robots" content="noindex" />
-<meta name="description" content="Indépendants et TPE : +50 000 € de chiffre d'affaires par mois, garanti. Regardez la vidéo et réservez votre appel." />
-<!-- iClosed : connexion ouverte dès le début pour accélérer le calendrier (surtout mobile) -->
-<link rel="preconnect" href="https://app.iclosed.io" crossorigin>
+<meta name="description" content="+50 000 € de CA par mois : la méthode. Indépendants et TPE : regardez la vidéo et réservez votre audit offert." />
+<!-- VSL Vidalytics : priorité de la page -->
+<link rel="preconnect" href="https://fast.vidalytics.com">
+<!-- iClosed : widget.js n'est PAS chargé ici, il est injecté à l'approche du calendrier (voir script en bas de page) -->
 <link rel="dns-prefetch" href="https://app.iclosed.io">
-<script type="text/javascript" src="https://app.iclosed.io/assets/widget.js" async></script>
+<!-- Polices : chargement non bloquant (graisses Inter réellement utilisées : 400 à 800) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif&display=swap"></noscript>
 <style>
+/* Police de secours calée sur les métriques d'Inter (pas de saut de mise en page quand Inter arrive) */
+@font-face{font-family:'Inter Fallback';src:local('Arial');ascent-override:90.44%;descent-override:22.52%;line-gap-override:0%;size-adjust:107.12%}
 /* ---------- RESET ---------- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,sans-serif;
   background:#fafafa;color:#0a0a0a;line-height:1.55;
   overflow-x:hidden;font-weight:400;
 }
@@ -164,6 +168,8 @@ h3{font-size:17px}
 .btn-main:hover svg{transform:translateX(4px)}
 .btn-note{margin-top:14px;font-size:13px;color:var(--gray-500)}
 .booking{margin:32px auto 0;max-width:900px;width:100%;scroll-margin-top:20px}
+/* emplacement réservé du calendrier tant qu'iClosed n'est pas chargé (hauteur fixée dans le HTML) */
+.iclosed-widget-lazy{background:var(--white);border:1px solid var(--gray-200);border-radius:16px}
 
 /* ---------- ÉTUDES DE CAS + TÉMOIGNAGES ---------- */
 .testimonials{padding:80px 0 90px;background:var(--white);border-top:1px solid var(--gray-200);text-align:center}
@@ -225,88 +231,6 @@ h3{font-size:17px}
 /* ---------- FOOTER ---------- */
 footer{padding:36px 0 44px;background:var(--ink);color:rgba(255,255,255,.55);text-align:center}
 footer p{font-size:13px}
-
-/* ---------- MODAL (popup form) ---------- */
-.modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.open{display:flex}
-.modal-overlay{
-  position:absolute;inset:0;background:rgba(10,10,10,.65);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  animation:fadeIn .3s ease-out;
-}
-.modal-card{
-  position:relative;z-index:1;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;
-  background:var(--white);border-radius:var(--radius-lg);
-  padding:34px 30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.5);
-  animation:slideUp .4s var(--t);
-}
-.modal-close{
-  position:absolute;top:14px;right:14px;z-index:2;
-  width:34px;height:34px;border-radius:50%;
-  background:var(--gray-100);color:var(--gray-700);
-  display:grid;place-items:center;
-  transition:background .2s var(--t),transform .3s var(--t),color .2s var(--t);
-}
-.modal-close:hover{background:var(--ink);color:var(--white);transform:rotate(90deg)}
-.modal-close svg{width:16px;height:16px;stroke-width:2.4}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{transform:translateY(20px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
-body.modal-open{overflow:hidden}
-
-.form-head{margin-bottom:16px}
-.form-head h3{font-size:20px;letter-spacing:-.02em;line-height:1.2}
-.form-head p{margin-top:6px;font-size:13px;color:var(--gray-500)}
-
-form{display:flex;flex-direction:column;gap:9px}
-.field{position:relative}
-.field label{
-  position:absolute;left:14px;top:13px;
-  font-size:13.5px;color:var(--gray-500);
-  pointer-events:none;transition:all .2s var(--t);
-  background:var(--white);padding:0 4px;
-}
-.field input{
-  width:100%;padding:15px 14px 11px;
-  border:1.5px solid var(--gray-200);border-radius:11px;
-  font-size:14px;background:var(--white);outline:none;
-  transition:border-color .2s var(--t),box-shadow .2s var(--t);
-}
-.field input:focus,
-.field input:not(:placeholder-shown){border-color:var(--ink)}
-.field input:focus+label,
-.field input:not(:placeholder-shown)+label{
-  top:-7px;font-size:10.5px;font-weight:600;color:var(--ink);letter-spacing:.05em;
-}
-.field input:focus{box-shadow:0 0 0 3px rgba(10,10,10,.06)}
-
-.cta{
-  display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  width:100%;padding:15px 20px;margin-top:4px;
-  background:var(--ink);color:var(--white);
-  border-radius:11px;font-weight:600;font-size:15px;letter-spacing:-.01em;
-  transition:transform .25s var(--t),box-shadow .25s var(--t),background .25s var(--t);
-  box-shadow:0 10px 24px rgba(10,10,10,.2);
-}
-.cta:hover{transform:translateY(-2px);background:#000;box-shadow:0 14px 32px rgba(10,10,10,.28)}
-
-.form-author{
-  display:flex;align-items:center;gap:12px;
-  padding:11px 12px;margin-top:14px;
-  background:var(--gray-50);border:1px solid var(--gray-200);border-radius:12px;
-}
-.form-author .ph{
-  flex:0 0 44px;width:44px;height:44px;border-radius:50%;
-  background:radial-gradient(circle at 50% 30%,#2a2a2a,#0a0a0a 75%);
-  position:relative;overflow:hidden;border:2px solid var(--white);
-  box-shadow:0 2px 8px rgba(10,10,10,.15);
-}
-.form-author .ph img{position:absolute;left:50%;bottom:-4%;transform:translateX(-50%);width:115%;height:auto}
-.form-author .text{font-size:11.5px;color:var(--gray-600);line-height:1.45}
-.form-author .text strong{color:var(--ink);font-weight:700}
-.form-author .text .sig{
-  font-family:'Instrument Serif',serif;font-style:italic;
-  font-size:17px;color:var(--ink);margin-right:3px;
-}
 
 /* ---------- STICKY MOBILE CTA ---------- */
 .sticky-cta{
@@ -412,12 +336,12 @@ form{display:flex;flex-direction:column;gap:9px}
 <!-- HERO : titre + VSL + CTA -->
 <section class="hero" id="top">
   <div class="container">
-    <h1 class="reveal">
+    <h1>
       +50 000 € de chiffre d'affaires par mois, <span class="guarantee">garanti</span>.
     </h1>
 
     <!-- VSL hébergée sur Vidalytics (VSL_1.0) — le ratio est géré par l'embed (padding-top) -->
-    <div class="video-wrap reveal delay-2" id="videoWrap" style="aspect-ratio:auto">
+    <div class="video-wrap" id="videoWrap" style="aspect-ratio:auto">
       <div id="vidalytics_embed_CQJVSGP8UYL_hAkC" style="width: 100%; position:relative; padding-top: 62.5%;"></div>
       <script type="text/javascript">
       (function (v, i, d, a, l, y, t, c, s) {
@@ -432,7 +356,7 @@ form{display:flex;flex-direction:column;gap:9px}
       </script>
     </div>
     <!-- CTA glossy : descend vers le calendrier iClosed -->
-    <a href="#reserver" class="btn-glossy reveal delay-3">
+    <a href="#reserver" class="btn-glossy">
       <span class="btn-glossy-label">Réservez votre audit offert</span>
       <span class="btn-glossy-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></span>
     </a>
@@ -440,7 +364,7 @@ form{display:flex;flex-direction:column;gap:9px}
     <!-- Prise de RDV : widget iClosed (remplace l'ancien bouton) -->
     <div class="booking" id="reserver">
       <!-- iClosed inline widget begin -->
-      <div class="iclosed-widget" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"></div>
+      <div class="iclosed-widget-lazy" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"></div>
       <!-- iClosed inline widget end -->
     </div>
   </div>
@@ -595,7 +519,7 @@ form{display:flex;flex-direction:column;gap:9px}
       </article>
     </div>
 
-    <button type="button" class="btn-main reveal js-booking-popup" data-iclosed-link="https://app.iclosed.io/e/lomig/vsl-funnel" data-embed-type="popup">
+    <button type="button" class="btn-main reveal js-booking-popup" data-booking-link="https://app.iclosed.io/e/lomig/vsl-funnel">
       Je veux les mêmes résultats
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
@@ -609,93 +533,16 @@ form{display:flex;flex-direction:column;gap:9px}
   </div>
 </footer>
 
-<!-- MODAL (popup form, opens on every CTA) -->
-<div class="modal" id="formModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
-  <div class="modal-overlay" data-close-modal></div>
-  <div class="modal-card">
-    <button class="modal-close" data-close-modal aria-label="Fermer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-
-    <div class="form-head">
-      <h3 id="modalTitle">Réservez votre appel gratuit</h3>
-      <p>Laissez vos coordonnées, je vous rappelle sous 24h.</p>
-    </div>
-
-    <form action="https://api.web3forms.com/submit"
-          method="POST"
-          onsubmit="handleSubmit(event)"
-          data-source="modal">
-      <input type="hidden" name="access_key" value="cbdf9f0b-d1bf-49ae-9b1a-21351afa73e2" />
-      <input type="hidden" name="subject" value="Nouvelle demande d'appel (landing)" />
-      <input type="hidden" name="from_name" value="Landing — Lomig" />
-      <input type="hidden" name="source" value="Popup modal" />
-      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
-
-      <div class="field">
-        <input type="text" name="name" id="modal-name" placeholder=" " required autocomplete="name" />
-        <label for="modal-name">Nom & prénom</label>
-      </div>
-      <div class="field">
-        <input type="email" name="email" id="modal-email" placeholder=" " required autocomplete="email" />
-        <label for="modal-email">Email</label>
-      </div>
-      <div class="field">
-        <input type="tel" name="phone" id="modal-phone" placeholder=" " required autocomplete="tel" />
-        <label for="modal-phone">Téléphone</label>
-      </div>
-
-      <button type="submit" class="cta">
-        Je réserve mon appel gratuit
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </form>
-
-    <div class="form-author">
-      <div class="ph"><img src="lomig.png" alt="Lomig Guegueniat" /></div>
-      <div class="text">
-        <span class="sig">Lomig</span> vous rappelle <strong>personnellement</strong> sous 24h.<br>
-        Pas de standard, pas de robot — c'est moi au bout du fil.
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- STICKY CTA (mobile only) -->
-<button type="button" class="sticky-cta" id="stickyCta" data-iclosed-link="https://app.iclosed.io/e/lomig/vsl-funnel" data-embed-type="popup">
+<button type="button" class="sticky-cta js-booking-popup" id="stickyCta" data-booking-link="https://app.iclosed.io/e/lomig/vsl-funnel">
   <span class="dot-g"></span>
   Je réserve mon appel gratuit
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
 </button>
 
 <script>
-/* ---------- MODAL ---------- */
-const modal=document.getElementById('formModal');
-function openModal(){
-  modal.classList.add('open');
-  document.body.classList.add('modal-open');
-  modal.setAttribute('aria-hidden','false');
-  setTimeout(()=>{
-    const f=document.getElementById('modal-name');
-    if(f) f.focus({preventScroll:true});
-  },280);
-}
-function closeModal(){
-  modal.classList.remove('open');
-  document.body.classList.remove('modal-open');
-  modal.setAttribute('aria-hidden','true');
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    'event': 'modal_close'
-  });
-}
-modal.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',closeModal));
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape' && modal.classList.contains('open')) closeModal();
-});
-
 /* ---------- ANCHOR INTERCEPTION (delegated) ---------- */
-/* Every <a href="#reserver"> opens the form modal. */
+/* Les liens #reserver descendent vers le calendrier iClosed. */
 document.addEventListener('click',ev=>{
   const a=ev.target.closest('a[href^="#"]');
   if(!a) return;
@@ -703,6 +550,7 @@ document.addEventListener('click',ev=>{
   if(id==='#reserver'){
     /* tous les CTA descendent vers le widget iClosed sous la vidéo */
     ev.preventDefault();
+    loadIclosed();
     document.getElementById('reserver').scrollIntoView({behavior:'smooth',block:'start'});
     if(window.dataLayer) dataLayer.push({event:'cta_click_booking'});
     return;
@@ -713,66 +561,36 @@ document.addEventListener('click',ev=>{
   }
 });
 
-/* ---------- FORM SUBMISSION (Web3Forms AJAX) ----------
-   The modal form POSTs to api.web3forms.com/submit with the
-   access_key. Web3Forms emails the address the access key was
-   created with. Botcheck honeypot silently drops spam.            */
-async function handleSubmit(e){
-  e.preventDefault();
-  const form=e.target;
-  const btn=form.querySelector('button[type="submit"]');
-  const original=btn.innerHTML;
+/* ---------- iCLOSED : chargé seulement à l'approche du calendrier ou au clic sur un bouton de réservation ----------
+   Rien d'iClosed (widget.js, iframe inline, iframe pop-up) n'est téléchargé à l'ouverture de la page. */
+const loadIclosed=(()=>{
+  let loaded=false, near=false, interacted=false;
+  const box=document.querySelector('.iclosed-widget-lazy'), booking=document.getElementById('reserver');
+  const evs=['scroll','wheel','touchstart','pointerdown','keydown','mousemove'];
+  const load=()=>{
+    if(loaded) return; loaded=true;
+    evs.forEach(e=>removeEventListener(e,onInteract));
+    if(io) io.disconnect();
+    if(box){box.classList.remove('iclosed-widget-lazy');box.classList.add('iclosed-widget');}
+    /* boutons pop-up : attributs iClosed posés maintenant, pour qu'il ne précharge pas son pop-up dès l'ouverture */
+    document.querySelectorAll('[data-booking-link]').forEach(b=>{b.setAttribute('data-iclosed-link',b.dataset.bookingLink);b.setAttribute('data-embed-type','popup');});
+    const s=document.createElement('script'); s.src='https://app.iclosed.io/assets/widget.js'; s.async=true; document.head.appendChild(s);
+  };
+  /* à moins de 800 px du calendrier ET après une première action du visiteur (défilement, toucher, souris, clavier) */
+  const onInteract=()=>{interacted=true; if(near) load();};
+  evs.forEach(e=>addEventListener(e,onInteract,{passive:true}));
+  const io=('IntersectionObserver' in window && booking)?new IntersectionObserver(en=>{near=en.some(x=>x.isIntersecting); if(near&&interacted) load();},{rootMargin:'800px 0px'}):null;
+  if(io) io.observe(booking); else load();
+  return load;
+})();
 
-  /* Personalise the email subject with the prospect's name */
-  const nameInput=form.querySelector('input[name="name"]');
-  const subjectInput=form.querySelector('input[name="subject"]');
-  if(subjectInput && nameInput && nameInput.value.trim()){
-    subjectInput.value=`Nouvelle demande d'appel — ${nameInput.value.trim()}`;
-  }
-
-  btn.innerHTML='Envoi en cours…';
-  btn.disabled=true;
-
-  try{
-    const formData=new FormData(form);
-    const payload=Object.fromEntries(formData);
-
-    const res=await fetch('https://api.web3forms.com/submit',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    const data=await res.json();
-    if(!data.success) throw new Error(data.message||'Submission failed');
-
-    /* GTM: fires once per SUCCESSFUL submission only — never on
-       validation, network or server errors (those hit the catch). */
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'form_submit_success' });
-
-    btn.innerHTML='✓ Demande envoyée — je vous recontacte sous 24h';
-    btn.style.background='#16a34a';
-    setTimeout(()=>{
-      form.reset();
-      btn.innerHTML=original;
-      btn.disabled=false;
-      btn.style.background='';
-      closeModal();
-    },3500);
-  }catch(err){
-    console.error('Form submission error:',err);
-    btn.innerHTML='Erreur — réessayez dans un instant';
-    btn.style.background='#dc2626';
-    setTimeout(()=>{
-      btn.innerHTML=original;
-      btn.disabled=false;
-      btn.style.background='';
-    },3000);
-  }
-}
-
-/* bouton figé : le pop-up est ouvert par iClosed, on trace juste le clic */
-document.querySelectorAll('#stickyCta,.js-booking-popup').forEach(b=>b.addEventListener('click',()=>{if(window.dataLayer)dataLayer.push({event:'cta_click_booking_popup',cta:b.id||'temoignages'});}));
+/* boutons pop-up : si iClosed n'est pas encore prêt au moment du clic, on le charge puis on ouvre le pop-up dès qu'il l'est */
+document.querySelectorAll('.js-booking-popup').forEach(b=>b.addEventListener('click',ev=>{
+  if(ev.isTrusted && window.dataLayer) dataLayer.push({event:'cta_click_booking_popup',cta:b.id||'temoignages'});
+  if(b.hasAttribute('data-processed')) return; /* iClosed gère l'ouverture */
+  loadIclosed();
+  let n=0; const t=setInterval(()=>{ if(b.hasAttribute('data-processed')){clearInterval(t); b.click();} else if(++n>50) clearInterval(t); },100);
+}));
 
 /* bouton figé : n'apparaît qu'après avoir dépassé le haut du calendrier iClosed */
 (()=>{
@@ -815,6 +633,12 @@ const io=new IntersectionObserver((entries)=>{
   });
 },{threshold:.12,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- GOOGLE ANALYTICS : bibliothèque gtag chargée après l'événement load ---------- */
+(()=>{
+  const ga=()=>{const s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id=G-QNCBPPE933'; document.head.appendChild(s);};
+  if(document.readyState==='complete') ga(); else addEventListener('load',ga,{once:true});
+})();
 </script>
 
 </body>
