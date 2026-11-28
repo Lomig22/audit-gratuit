@@ -174,7 +174,10 @@ h3{font-size:17px}
 .btn-note{margin-top:14px;font-size:13px;color:var(--gray-500)}
 .booking{margin:32px auto 0;max-width:900px;width:100%;scroll-margin-top:20px}
 /* emplacement réservé du calendrier tant qu'iClosed n'est pas chargé (hauteur fixée dans le HTML) */
-.iclosed-widget-lazy{background:var(--white);border:1px solid var(--gray-200);border-radius:16px}
+.iclosed-widget-lazy{background:var(--white);border:1px solid var(--gray-200);border-radius:16px;display:flex;align-items:flex-start;justify-content:center;padding-top:72px}
+.cal-loading{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gray-500)}
+.cal-spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);border-top-color:var(--blue);animation:cal-spin .8s linear infinite}
+@keyframes cal-spin{to{transform:rotate(360deg)}}
 
 /* ---------- ÉTUDES DE CAS + TÉMOIGNAGES ---------- */
 .testimonials{padding:80px 0 90px;background:var(--white);border-top:1px solid var(--gray-200);text-align:center}
@@ -371,7 +374,7 @@ footer p{font-size:13px}
     <!-- Prise de RDV : widget iClosed (remplace l'ancien bouton) -->
     <div class="booking" id="reserver">
       <!-- iClosed inline widget begin -->
-      <div class="iclosed-widget-lazy" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"></div>
+      <div class="iclosed-widget-lazy" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%; height: 620px"><div class="cal-loading" role="status"><span class="cal-spinner" aria-hidden="true"></span>Chargement du calendrier…</div></div>
       <!-- iClosed inline widget end -->
     </div>
   </div>
@@ -568,27 +571,28 @@ document.addEventListener('click',ev=>{
   }
 });
 
-/* ---------- iCLOSED : chargé seulement à l'approche du calendrier ou au clic sur un bouton de réservation ----------
-   Rien d'iClosed (widget.js, iframe inline, iframe pop-up) n'est téléchargé à l'ouverture de la page. */
+/* ---------- iCLOSED : jamais avant l'événement load (priorité à la VSL), puis au premier geste
+   du visiteur OU automatiquement 3 s après load, selon ce qui arrive en premier ---------- */
 const loadIclosed=(()=>{
-  let loaded=false, near=false, interacted=false;
-  const box=document.querySelector('.iclosed-widget-lazy'), booking=document.getElementById('reserver');
+  let wanted=false, loaded=false, timer=null;
+  const box=document.querySelector('.iclosed-widget-lazy');
   const evs=['scroll','wheel','touchstart','pointerdown','keydown','mousemove'];
-  const load=()=>{
+  const pageLoaded=()=>document.readyState==='complete';
+  const inject=()=>{
     if(loaded) return; loaded=true;
-    evs.forEach(e=>removeEventListener(e,onInteract));
-    if(io) io.disconnect();
-    if(box){box.classList.remove('iclosed-widget-lazy');box.classList.add('iclosed-widget');}
+    clearTimeout(timer);
+    evs.forEach(e=>removeEventListener(e,request));
+    if(box){box.innerHTML='';box.classList.remove('iclosed-widget-lazy');box.classList.add('iclosed-widget');}
     /* boutons pop-up : attributs iClosed posés maintenant, pour qu'il ne précharge pas son pop-up dès l'ouverture */
     document.querySelectorAll('[data-booking-link]').forEach(b=>{b.setAttribute('data-iclosed-link',b.dataset.bookingLink);b.setAttribute('data-embed-type','popup');});
     const s=document.createElement('script'); s.src='https://app.iclosed.io/assets/widget.js'; s.async=true; document.head.appendChild(s);
   };
-  /* à moins de 800 px du calendrier ET après une première action du visiteur (défilement, toucher, souris, clavier) */
-  const onInteract=()=>{interacted=true; if(near) load();};
-  evs.forEach(e=>addEventListener(e,onInteract,{passive:true}));
-  const io=('IntersectionObserver' in window && booking)?new IntersectionObserver(en=>{near=en.some(x=>x.isIntersecting); if(near&&interacted) load();},{rootMargin:'800px 0px'}):null;
-  if(io) io.observe(booking); else load();
-  return load;
+  /* geste ou clic avant load : mémorisé, exécuté dès que load arrive */
+  function request(){ wanted=true; if(pageLoaded()) inject(); }
+  evs.forEach(e=>addEventListener(e,request,{passive:true}));
+  const onLoad=()=>{ if(wanted) inject(); else timer=setTimeout(inject,3000); };
+  if(pageLoaded()) onLoad(); else addEventListener('load',onLoad,{once:true});
+  return request;
 })();
 
 /* boutons pop-up : si iClosed n'est pas encore prêt au moment du clic, on le charge puis on ouvre le pop-up dès qu'il l'est */
@@ -596,7 +600,7 @@ document.querySelectorAll('.js-booking-popup').forEach(b=>b.addEventListener('cl
   if(ev.isTrusted && window.dataLayer) dataLayer.push({event:'cta_click_booking_popup',cta:b.id||'temoignages'});
   if(b.hasAttribute('data-processed')) return; /* iClosed gère l'ouverture */
   loadIclosed();
-  let n=0; const t=setInterval(()=>{ if(b.hasAttribute('data-processed')){clearInterval(t); b.click();} else if(++n>50) clearInterval(t); },100);
+  let n=0; const t=setInterval(()=>{ if(b.hasAttribute('data-processed')){clearInterval(t); b.click();} else if(++n>300) clearInterval(t); },100);
 }));
 
 /* bouton figé : n'apparaît qu'après avoir dépassé le haut du calendrier iClosed */
