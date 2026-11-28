@@ -175,15 +175,15 @@ h3{font-size:17px}
 .btn-note{margin-top:14px;font-size:13px;color:var(--gray-500)}
 .booking{margin:32px auto 0;max-width:900px;width:100%;scroll-margin-top:20px}
 /* emplacement réservé du calendrier tant qu'iClosed n'est pas chargé (hauteur fixée dans le HTML) */
-/* zone du calendrier : fond blanc + loader tant que l'iframe iClosed n'est pas prête */
-.cal-box{background:var(--white);border:1px solid var(--gray-200);border-radius:16px;overflow:hidden}
-.cal-box.cal-ready{background:none;border-color:transparent}
-.cal-box .cal-loading{position:absolute;top:72px;left:0;right:0;justify-content:center}
-/* hauteur réservée du calendrier (iClosed l'ajuste ensuite lui-même via un style inline) */
-#reserver > .cal-box{position:relative;height:620px}
-@media(max-width:720px){#reserver > .cal-box{height:861px}}
-.cal-loading{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gray-500)}
-.cal-spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);border-top-color:var(--blue);animation:cal-spin .8s linear infinite}
+/* Calendrier : conteneur iClosed sans aucun style ajouté (comme à l'origine : pas de bordure, d'arrondi,
+   de fond ni d'overflow, sinon l'iframe est plus petite que son contenu, défile et capte le scroll au doigt).
+   Pendant le chargement seulement : hauteur minimale réservée + loader posé par-dessus. */
+#reserver > .iclosed-widget.cal-wait{position:relative;min-height:620px}
+@media(max-width:720px){#reserver > .iclosed-widget.cal-wait{min-height:861px}}
+.cal-loading{position:absolute;inset:0;z-index:1;padding-top:72px;align-items:flex-start;justify-content:center;
+  background:var(--white);border:1px solid var(--gray-200);border-radius:16px}
+.cal-loading{display:flex;gap:10px;font-size:14px;line-height:20px;color:var(--gray-500)}
+.cal-spinner{flex:0 0 18px;margin-top:1px;width:18px;height:18px;border-radius:50%;border:2px solid var(--gray-200);border-top-color:var(--blue);animation:cal-spin .8s linear infinite}
 @keyframes cal-spin{to{transform:rotate(360deg)}}
 
 /* ---------- ÉTUDES DE CAS + TÉMOIGNAGES ---------- */
@@ -381,7 +381,7 @@ footer p{font-size:13px}
     <!-- Prise de RDV : widget iClosed (remplace l'ancien bouton) -->
     <div class="booking" id="reserver">
       <!-- iClosed inline widget begin -->
-      <div class="iclosed-widget cal-box" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%"><div class="cal-loading" role="status"><span class="cal-spinner" aria-hidden="true"></span>Chargement du calendrier…</div></div>
+      <div class="iclosed-widget cal-wait" data-url="https://app.iclosed.io/e/lomig/vsl-funnel" title="VSL Funnel" style="width: 100%"><div class="cal-loading" role="status"><span class="cal-spinner" aria-hidden="true"></span>Chargement du calendrier…</div></div>
       <!-- iClosed inline widget end -->
     </div>
   </div>
@@ -579,18 +579,26 @@ document.addEventListener('click',ev=>{
 
 /* ---------- iCLOSED ----------
    Calendrier intégré : widget.js est chargé dès l'ouverture (balise async dans le <head>).
-   Loader « Chargement du calendrier… » retiré dès que l'iframe est prête. */
+   - le loader disparaît dès que l'iframe est prête ;
+   - la hauteur minimale réservée est retirée dès qu'iClosed a fixé sa propre hauteur (style inline ;
+     s'il ne le fait jamais, elle reste, pour ne pas réduire le calendrier),
+     pour que l'iframe fasse toute la hauteur de son contenu (pas de défilement interne). */
 (()=>{
-  const box=document.querySelector('.cal-box'); if(!box) return;
-  const done=()=>{const l=box.querySelector('.cal-loading'); if(l) l.remove(); box.classList.add('cal-ready');};
-  const watch=f=>{f.addEventListener('load',done,{once:true});};
-  const f0=box.querySelector('iframe'); if(f0) watch(f0);
-  new MutationObserver((m,o)=>{const f=box.querySelector('iframe'); if(f){watch(f); o.disconnect();}}).observe(box,{childList:true});
+  const box=document.querySelector('#reserver > .iclosed-widget'); if(!box) return;
+  const hideLoader=()=>{const l=box.querySelector('.cal-loading'); if(l) l.remove();};
+  const release=()=>{box.classList.remove('cal-wait'); mo.disconnect();};
+  const mo=new MutationObserver(()=>{
+    const f=box.querySelector('iframe');
+    if(f && !f.__calWatched){f.__calWatched=true; f.addEventListener('load',hideLoader,{once:true});}
+    if(box.style.height) { hideLoader(); release(); }
+  });
+  mo.observe(box,{childList:true,attributes:true,attributeFilter:['style']});
 })();
 
-/* Pop-up : jamais préchargé à l'ouverture. Préparé au 1er survol / toucher / focus d'un bouton de réservation,
-   ou au clic. Les attributs iClosed sont alors posés et un marqueur est ajouté au DOM :
-   iClosed le détecte (MutationObserver), crée le pop-up et branche les boutons. */
+/* Pop-up : jamais au démarrage. Préparé 1 s après l'événement load, ou avant si un bouton de réservation
+   devient visible, est survolé ou touché, pour qu'il soit prêt et s'ouvre instantanément au 1er clic.
+   Les attributs iClosed sont posés et un marqueur est ajouté au DOM : iClosed le détecte (MutationObserver),
+   crée le pop-up et branche les boutons. */
 const armPopup=(()=>{
   let armed=false;
   return ()=>{
@@ -601,6 +609,14 @@ const armPopup=(()=>{
     m.innerHTML='<span data-iclosed-link="'+link.dataset.bookingLink+'" data-embed-type="popup"></span>';
     document.body.appendChild(m);
   };
+})();
+(()=>{
+  const go=()=>setTimeout(armPopup,1000);
+  if(document.readyState==='complete') go(); else addEventListener('load',go,{once:true});
+  if('IntersectionObserver' in window){
+    const vio=new IntersectionObserver(en=>{if(en.some(e=>e.isIntersecting)){armPopup(); vio.disconnect();}});
+    document.querySelectorAll('.js-booking-popup').forEach(b=>vio.observe(b));
+  }
 })();
 document.querySelectorAll('.js-booking-popup').forEach(b=>{
   ['pointerenter','touchstart','focus'].forEach(e=>b.addEventListener(e,armPopup,{passive:true,once:true}));
